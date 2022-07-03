@@ -1,4 +1,5 @@
 const t= new Set();
+
 chrome.tabs.query({active:true,currentWindow:true},gotTabs);
 function gotTabs(tabs){
     console.log("Got tabs");
@@ -7,9 +8,11 @@ function gotTabs(tabs){
     output=document.getElementById("tab");
     console.log(t);
 }
+
 var port = chrome.extension.connect({
     name: "Sample Communication"
 });
+
 var res=document.getElementById('res');
 var opentime=document.getElementById('opentime');
 var closetime=document.getElementById('closetime');
@@ -20,6 +23,7 @@ port.onMessage.addListener(function(msg) {
     openm+=m[0];
     closem+=m[1];
     var tabsurl="";
+    console.log(openm);
     openm=openm.split(';');
     console.log(openm.length);
     console.log(openm);
@@ -30,11 +34,21 @@ port.onMessage.addListener(function(msg) {
     for(i=0;i<Tabsobj.length;i++){
         console.log(Tabsobj[i].url);
         tabsurl+="<li>"+Tabsobj[i].url+"\n"+"</li>";
+    }var closetabDetails="";
+    if(closem[0]===""){
+        console.log("No Tab has been closed");
     }
+    else{
+        closetabDetails=JSON.parse(closem[1]);
+        closetabDetails=Object.keys(closetabDetails);
+    }
+    
+    console.log(closetabDetails);
+    console.log(openm[openm.length-1])
     // console.log("message recieved" + msg);
     res.innerHTML+=openm[0]+"<br>"+"Current Tabs"+"<br>"+tabsurl;
-    opentime.innerHTML=openm[openm.length-2]+"      "+"Tab Open Time: "+openm[openm.length-1];
-    closetime.innerHTML=closem[0]+"     "+closem[1]+"     "+closem[2];
+    opentime.innerHTML="<h3>Open Tab Details</h3>"+openm[openm.length-2]+"      "+"Tab Open Time: "+openm[openm.length-1];
+    closetime.innerHTML="<h3>Closed Tab Details</h3>"+"Closed TabID: "+closetabDetails[0]+"<br>     "+closem[2]+"<br>     "+closem[3];
 });
 // var m=msg.split(';');
 //     console.log(m.length);

@@ -14,6 +14,7 @@ var port = chrome.extension.connect({
 });
 
 var res=document.getElementById('res');
+var tab=document.getElementById('tab');
 var opentime=document.getElementById('opentime');
 var closetime=document.getElementById('closetime');
 port.postMessage("Hi BackGround");
@@ -33,22 +34,35 @@ port.onMessage.addListener(function(msg) {
     var Tabsobj=JSON.parse(openm[1]);
     for(i=0;i<Tabsobj.length;i++){
         console.log(Tabsobj[i].url);
-        tabsurl+="<li>"+Tabsobj[i].url+"\n"+"</li>";
-    }var closetabDetails="";
-    if(closem[0]===""){
-        console.log("No Tab has been closed");
-    }
-    else{
-        closetabDetails=JSON.parse(closem[1]);
-        closetabDetails=Object.keys(closetabDetails);
+        tab.innerHTML+="<li>"+Tabsobj[i].url+"\n"+"</li>";
     }
     
-    console.log(closetabDetails);
+
     console.log(openm[openm.length-1])
     // console.log("message recieved" + msg);
-    res.innerHTML+=openm[0]+"<br>"+"Current Tabs"+"<br>"+tabsurl;
-    opentime.innerHTML="<h3>Open Tab Details</h3>"+openm[openm.length-2]+"      "+"Tab Open Time: "+openm[openm.length-1];
-    closetime.innerHTML="<h3>Closed Tab Details</h3>"+"Closed TabID: "+closetabDetails[0]+"<br>     "+closem[2]+"<br>     "+closem[3];
+    //res.innerHTML+="Current Tabs"+"<br>"+tabsurl;
+    opentime.innerHTML="<h3>Open Tab Details</h3>"+openm[openm.length-2]+"     <br> "+"Tab Open Time: "+openm[openm.length-1];
+    if(closem.length<=4){
+        closetime.innerHTML="<h3>Closed Tab Details</h3>"+"Closed TabID: "+closem[1]+"<br>     "+closem[2]+"<br>     "+closem[3];
+        tab.innerHTML="";
+        for(i=0;i<Tabsobj.length;i++){
+            if(Tabsobj[i].id!=closem[1])
+            {
+                tab.innerHTML+="<li>"+Tabsobj[i].url+"\n"+"</li>";
+            }
+        }   
+    }
+    else if(closem.length>4){
+        closetime.innerHTML="<h3>Closed Tab Details</h3>"+"Closed TabID: "+closem[closem.length-4]+"<br>     "+closem[closem.length-3]+"<br>     "+closem[closem.length-2];
+        tab.innerHTML="";
+        for(i=0;i<Tabsobj.length;i++){
+            if(Tabsobj[i].id!=closem[closem.length-4])
+            {
+                tab.innerHTML+="<li>"+Tabsobj[i].url+"\n"+"</li>";
+            }
+        }
+    }
+    
 });
 // var m=msg.split(';');
 //     console.log(m.length);

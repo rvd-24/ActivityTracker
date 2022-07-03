@@ -8,14 +8,14 @@ chrome.tabs.query({windowType:'normal'}, function(tabs) {
         console.log(tabs[i].url);
     }var message="";
     var closingm="";
-    message+='Number of open tabs in this window: '+JSON.stringify(tabs.length)+";"+JSON.stringify(tabs);
+    message+='Total Number of open tabs: '+JSON.stringify(tabs.length)+";"+JSON.stringify(tabs);
     chrome.tabs.onActivated.addListener(function(tab) {
         openTabs[tab.tabId] = new Date();   
         console.log("Active tabID is:");
         console.log(tab.tabId);
         //console.log(tab.url);
         console.log(openTabs);
-        message+=";Active tabID is: "+JSON.stringify(tab.tabId)+';'+JSON.stringify(openTabs[tab.tabId]);
+        message+=";Active tabID is: "+JSON.stringify(tab.tabId)+';'+openTabs[tab.tabId];
     });
     chrome.tabs.onRemoved.addListener(function(tab) {   
             closeTabs[tab]=new Date();
@@ -25,7 +25,9 @@ chrome.tabs.query({windowType:'normal'}, function(tabs) {
                 console.log("Closed Tab Details");
                 console.log(closeTabs);
                 console.log((closeTabs[tab]-openTabs[tab])/1000);
-                closingm+="Closed Tab Details: "+JSON.stringify(closeTabs)+';'+"Close Time: "+JSON.stringify(closeTabs[tab])+";"+"Time Active: "+(closeTabs[tab]-openTabs[tab])/1000;
+                console.log(Object.keys(closeTabs).pop());
+                console.log(Object.values(closeTabs).pop());
+                closingm+="Closed Tab Details: ;"+JSON.stringify(closeTabs)+';'+"Close Time: "+closeTabs[tab]+";"+"Time Active: "+(closeTabs[tab]-openTabs[tab])/1000+"s";
                 delete openTabs[tab];
             }
             console.log(openTabs);

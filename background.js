@@ -1,7 +1,9 @@
 console.log("Background script is running")
 var openTabs = {};
 var closeTabs={};
-
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+  }
 chrome.tabs.query({windowType:'normal'}, function(tabs) {
     console.log('Number of open tabs in all normal browser windows:',tabs);
     for(i=0;i<tabs.length;i++){
@@ -25,9 +27,12 @@ chrome.tabs.query({windowType:'normal'}, function(tabs) {
                 console.log("Closed Tab Details");
                 console.log(closeTabs);
                 console.log((closeTabs[tab]-openTabs[tab])/1000);
-                console.log(Object.keys(closeTabs).pop());
-                console.log(Object.values(closeTabs).pop());
-                closingm+="Closed Tab Details: ;"+JSON.stringify(closeTabs)+';'+"Close Time: "+closeTabs[tab]+";"+"Time Active: "+(closeTabs[tab]-openTabs[tab])/1000+"s";
+                var d=Object.values(closeTabs);
+                var maxDate=new Date(Math.max.apply(null,d));
+                console.log(maxDate);
+                let keys = Object.keys(closeTabs).filter(k=>JSON.stringify(closeTabs[k])===JSON.stringify(maxDate));
+                console.log(keys);
+                closingm+="Closed Tab Details: ;"+keys+';'+"Close Time: "+maxDate+";"+"Time Active: "+(maxDate-openTabs[tab])/1000+"s"+";";
                 delete openTabs[tab];
             }
             console.log(openTabs);

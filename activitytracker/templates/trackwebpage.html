@@ -1,0 +1,130 @@
+{% load static %}
+{% static "images" as baseUrl %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracker</title>
+    <link rel="stylesheet" href="{% static 'styles/indexstyle.css'%}">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["corechart"]});
+      google.charts.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Task', 'Hours per Day'],
+          ['vtop.com',5],
+          ['youtube.com',4],
+          ['netflix.com',3],
+          ['Others',2]
+        ]);
+
+        var options = {
+            colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
+            is3D: true,
+            responsive:true
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+        chart.draw(data, options);
+      }
+      window.onresize = resizeChart;
+      function resizeChart() {
+          //do a load of stuff
+          drawChart();
+      }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <div class="left">
+            <img src="{% static 'images/logo1.png'%}" alt="logo1">
+            <p>Activity Tracker</p>
+        </div>
+        <div class="center">
+            {%if user.is_authenticated%}
+               <h2> Hello,{{user.username}}</h2>
+            {%endif%}
+        </div>
+        <div class="right">
+            <p><a href="{% url 'logout' %}">Logout</a></p>
+        </div>
+    </div>
+    <div class="content">
+        <div class="display">
+            <div class="box">
+                <div class="para">
+                    <h4>Today</h4>
+                    <h3>6h 20m</h3>
+                    <div class="past">
+                        <h4 id="val1">+10%</h4>
+                        <p>yesterday</p>
+                        <h5>5h 20m</h5>
+                    </div>
+                </div>
+                <div class="line">
+                    <!-- <img src="{% static 'images/inc.png'%}" id="g1" alt="increase"> -->
+                </div>
+            </div>
+            <div class="box">
+                <div class="para">
+                    <h4>This week</h4>
+                    <h3>46h 20m</h3>
+                    <div class="past">
+                        <h4 id="val2">-17%</h4>
+                        <p>last week</p>
+                        <h5>55h 20m</h5>
+                    </div>
+                </div>
+                <div class="line">
+                    <!-- <img src="{% static 'images/dec.png'%}" id="g2" alt="decrease"> -->
+                </div>
+            </div>
+        </div>
+        <div class="display2">
+            <div class="graph">
+                <div class="head">
+                    <h1 id="graphhead">Today's Activity</h1>
+                    <div class="dropm1">
+                        <a id="drop1">Today &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow1"></a>
+                    <div id="drop1ele">
+                        <hr>
+                        <a>This week</a>
+                    </div>
+                    </div>
+                </div>
+                <div id="piechart_3d" class="chart"></div>
+            </div>
+            <div class="most">
+                <div class="head">
+                    <h1 id="mosthead">Most used</h1>
+                    <div class="dropm2">
+                        <a id="drop2">Today &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow2"></a>
+                    <div id="drop2ele">
+                        <hr>
+                        <a>This week</a>
+                    </div>
+                    </div>
+                </div>
+                <div class="list">
+                    {%for Tabdetail in opentabs%}
+                    <hr>
+                    <div class="p"><p>{{Tabdetail}}</p></div>
+                    <!-- <hr>
+                    <div class="p"><p>youtube.com</p><h3>2h 12m</h3></div>
+                    <hr>
+                    <div class="p"><p>netflix.com</p><h3>2h 12m</h3></div>
+                    <hr>
+                    <div class="p"><p>instagram.com</p><h3>2h 12m</h3></div> -->
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="{%static 'js/src.js'%}"></script>
+</body>
+</html>

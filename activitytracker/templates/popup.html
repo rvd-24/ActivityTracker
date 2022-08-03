@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+    <head>
+        <title>
+        </title>
+        <script src="jquery-3.1.0.min.js"></script>
+        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="popupbutton.css">
+    </head>
+    <body>
+        <script src="background.js"></script>
+        <h1>Current Tabs Open</h1>
+        <p id="res"></p>
+        <p id="tab"></p>
+
+        <p id="opentime"><h5>Active Running Time:</h5>
+                 <div id="stopwatch">
+                    <p id="min"></p><p>&nbsp;:&nbsp;</p><p id="sec"></p>
+                    <br>
+                </div>
+                <!-- <button id="start">Start</button>                 -->
+            <!-- </div> -->
+        </p>
+        <p id="closetime"></p>
+        <form action="POST" id="form">
+            <button type="submit"><span>Store to DB</span></button> 
+        </form>
+    </body>
+    <script src="popup.js"></script>
+</html>

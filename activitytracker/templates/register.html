@@ -1,0 +1,61 @@
+{% load static %}
+{% static "images" as baseUrl %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'styles/registerstyles.css' %}"/>
+    <title>Activity Tracker Register</title>
+    <script>
+    function verifyPassword() {
+        var pw = document.getElementById("pass").value;
+        //check empty password field
+        if(pw === document.getElementById("repass").value) {
+           document.getElementById("msg").innerHTML = "Password Verified!";
+           return false;
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="main" style="background-image: url({% static 'images/back.png' %});">
+        <div class="content">
+            <div class="para">
+                <div class="about">
+                    <h1>Activity Tracker</h1>
+                <p>With more competitive than ever before, people have to manage time better in order to gain an advantage. The more work they do in the shortest amount of time, the faster they can grow. One way to boost productivity is through time tracking.</p>
+                </div>
+                <div class="quote">
+                    <p class="statement">"The bad news is time flies. The good news is you're the pilot."</p><br>
+                    <p class="author">- MICHAEL ALTSHULER</p>
+                </div>
+            </div>
+            <div class="login">
+                <h1>Hello!</h1>
+                <p>Register Here To Track Your Activity</p>
+                <form action="" method="POST">
+                    {%csrf_token %}
+                    <input type="email" name="email" placeholder="Email"/><br>
+                    <input type="text" name="username" placeholder="Username"/><br>
+                    <input type="password" id="pass" name="passw" placeholder="Password"/><br>
+                    <input type="password" id="repass" name="pass2" placeholder="Confirm Password"/><br>
+                    <button>Register</button>
+                </form>
+                <div id="msg">{% for message in messages%}
+                    <h3>
+                            {{message}}
+                    </h3>
+                    {% endfor %}
+                </div>
+                <div class="register">
+                    <p>Already Registered?</p>
+                    <a href="../useraccount/login">login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

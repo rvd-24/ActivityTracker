@@ -9,34 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Tracker</title>
     <link rel="stylesheet" href="{% static 'styles/indexstyle.css'%}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load("current", {packages:["corechart"]});
-      google.charts.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Task', 'Hours per Day'],
-          ['vtop.com',5],
-          ['youtube.com',4],
-          ['netflix.com',3],
-          ['Others',2]
-        ]);
-
-        var options = {
-            colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
-            is3D: true,
-            responsive:true
-        };
-
-        var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-        chart.draw(data, options);
-      }
-      window.onresize = resizeChart;
-      function resizeChart() {
-          //do a load of stuff
-          drawChart();
-      }
-    </script>
+    <script type="text/javascript" src="{%static 'js/trackwebpage.js'%}"></script>
 </head>
 <body>
     <div class="header">
@@ -58,7 +33,7 @@
             <div class="box">
                 <div class="para">
                     <h4>Today</h4>
-                    <h3>6h 20m</h3>
+                    <h3 id="todaydata">6h 20m</h3>
                     <div class="past">
                         <h4 id="val1">+10%</h4>
                         <p>yesterday</p>
@@ -96,7 +71,7 @@
                     </div>
                     </div>
                 </div>
-                <div id="piechart_3d" class="chart"></div>
+                <div id="chart_div" class="chart"></div>
             </div>
             <div class="most">
                 <div class="head">
@@ -124,7 +99,6 @@
             </div>
         </div>
     </div>
-    
     <script src="{%static 'js/src.js'%}"></script>
-</body>
+    </body>
 </html>

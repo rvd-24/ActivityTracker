@@ -34,6 +34,9 @@ CSRF_TRUSTED_ORIGINS = ["chrome-extension://mdchgpcpbbmjnoelkiinjjpbckciimen"]
 
 AUTH_USER_MODEL="useraccount.useraccount"
 
+# Close the session when user closes the browser
+SESSION_EXPIRE_AT_BROWSER_CLOSE= True
+
 # Application definition
 
 INSTALLED_APPS = [

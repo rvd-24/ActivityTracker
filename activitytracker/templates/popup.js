@@ -97,9 +97,10 @@ port.onMessage.addListener(function(msg) {
         //tab.innerHTML+="<li>"+Tabsobj[i].url+"\n"+"</li>";
     }
     console.log(tabdata);
+
     // const form=document.getElementById("form")
     // form.addEventListener("submit",submithandler);
-
+/*
     setInterval(function submithandler(){
         console.log("Sending ajax request");
         $.ajax({
@@ -128,4 +129,5 @@ port.onMessage.addListener(function(msg) {
 //     for(i=0;i<Tabsobj.length;i++){
 //         console.log(Tabsobj[i].url);
 //         tabsurl+="<li>"+Tabsobj[i].url+"\n"+"</li>";
-//     }
+*/
+})

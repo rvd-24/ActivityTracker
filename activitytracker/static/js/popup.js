@@ -9,6 +9,22 @@ function gotTabs(tabs){
     output=document.getElementById("tab");
     console.log(t);
 }
+chrome.alarms.create('test',{
+    when:Date.now(),
+    periodInMinutes:0.1
+})
+chrome.alarms.onAlarm.addListener((alarm)=>{
+    if(alarm.name==='test'){
+        chrome.notifications.create('test', {
+            type: 'basic',
+            iconUrl: 'back.png',
+            title: 'Alert! You are not a Procrastinator',
+            message: 'You seem to be productive at unimportant things.',
+            priority: 2
+        });
+    }
+})
+
 var tabdata={
     "opentabs":[],
     "closetabs":[],
@@ -17,7 +33,8 @@ var tabdata={
 var port = chrome.extension.connect({
     name: "Sample Communication"
 });
-
+var min=document.getElementById('min')
+var sec=document.getElementById('sec');
 var res=document.getElementById('res');
 var tab=document.getElementById('tab');
 var opentime=document.getElementById('opentime');
@@ -28,6 +45,8 @@ port.onMessage.addListener(function(msg) {
     var openm="";var closem="";
     openm+=m[0];
     closem+=m[1];
+    var tabtime=JSON.parse(m[2])
+    console.log(tabtime);
     var tabsurl="";
     console.log(openm);
     openm=openm.split(';');
@@ -43,6 +62,8 @@ port.onMessage.addListener(function(msg) {
         tabdata.opentabs.push(Tabsobj[i].url);
         // currTabs+=Tabsobj[i].url+"<>";
     }
+    min.innerHTML=tabtime.minutes;
+    sec.innerHTML=tabtime.seconds;
     const [first]=t;
     console.log(openm[openm.length-1])
     // console.log("message recieved" + msg);
@@ -76,26 +97,12 @@ port.onMessage.addListener(function(msg) {
         //tab.innerHTML+="<li>"+Tabsobj[i].url+"\n"+"</li>";
     }
     console.log(tabdata);
-    // console.log(currTabs)
-    // $(document).ready(function() {
-    //     function onchange (evt) {
-    //       $.ajax({
-    //         url: 'http://127.0.0.1:8000/update_tabs/',
-    //         data: {datatab: currTabs, csrfmiddlewaretoken: '{{ csrf_token }}'},
-    //         type: 'POST'
-    //       }).done(function(response){
-    //         console.log(response);
-    //       });
-    //     }
-   
-    //     window.onblur = onchange;
-   
-    //   });
-    const form=document.getElementById("form")
-    form.addEventListener("submit",submithandler);
 
-    function submithandler(e){
-        e.preventDefault()
+    // const form=document.getElementById("form")
+    // form.addEventListener("submit",submithandler);
+/*
+    setInterval(function submithandler(){
+        console.log("Sending ajax request");
         $.ajax({
             type:"POST",
             url:"http://127.0.0.1:8000/update_tabs/",
@@ -113,7 +120,7 @@ port.onMessage.addListener(function(msg) {
               }
               }
         }) 
-    }
+    },10000);
 });
 // var m=msg.split(';');
 //     console.log(m.length);
@@ -122,4 +129,5 @@ port.onMessage.addListener(function(msg) {
 //     for(i=0;i<Tabsobj.length;i++){
 //         console.log(Tabsobj[i].url);
 //         tabsurl+="<li>"+Tabsobj[i].url+"\n"+"</li>";
-//     }
+*/
+})

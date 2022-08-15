@@ -11,12 +11,13 @@
         }
     ],
     "background":{
-        "scripts":["activitytracker/templates/background.js"]
+        "scripts":["activitytracker/templates/jquery-3.1.0.min.js","activitytracker/templates/background.js"]
     },
     "permissions":["tabs","serial","http://127.0.0.1:8000/","notifications","alarms"],
     "browser_action":{
         "default_icon":"activitytracker/templates/icon16.png",
         "default_popup":"activitytracker/templates/popup.html",
         "default_title":"A popup is displayed"
-    } 
+    },
+    "content_security_policy": "script-src 'self' blob: filesystem:"
 }

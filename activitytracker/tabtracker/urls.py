@@ -4,5 +4,6 @@ from .views import update_tabs
 
 urlpatterns=[
     re_path(r'^update_tabs/',views.update_tabs,name="update_tabs"),
+    re_path(r'^sendchartdata/',views.sendchartdata,name="sendchartdata"),
     path('home',views.home,name="home")
 ]

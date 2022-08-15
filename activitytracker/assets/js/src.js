@@ -2,19 +2,19 @@ var s1=document.getElementById("val1").innerHTML;
 var s2=document.getElementById("val2").innerHTML;
 if(s1[0]==="+"){
     document.getElementById("val1").style.color="#5ECA2C";
-    document.getElementById("g1").src="increase.png"
+    // document.getElementById("g1").src="inc.png"
 }
 else{
     document.getElementById("val1").style.color="#F95050";
-    document.getElementById("g1").src="decrease.png"
+    // document.getElementById("g1").src="dec.png"
 }
 if(s2[0]==="+"){
     document.getElementById("val2").style.color="#5ECA2C";
-    document.getElementById("g2").src="increase.png"
+    // document.getElementById("g2").src="inc.png"
 }
 else{
     document.getElementById("val2").style.color="#F95050";
-    document.getElementById("g2").src="decrease.png"
+    // document.getElementById("g2").src="dec.png"
 }
 
 const myEl = document.getElementById('drop1');

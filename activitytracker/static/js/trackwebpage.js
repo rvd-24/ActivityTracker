@@ -61,7 +61,7 @@ setInterval(function submithandler(){
                 }
                 }
                 todaydata=document.getElementById('todaydata');
-                todaydata.innerHTML=recvmsg.todayhour+" h"+" "+recvmsg.todayminutes+" m "+recvmsg.todaysec+" s";
+                todaydata.innerHTML=recvmsg.todayhour+" h"+" "+recvmsg.todayminutes+" m ";
             },
         error: function(){
             console.log("json not found");

@@ -248,12 +248,12 @@
     margin: 3% 1%;
 }
 .most .list .p{
-    display: flex;
+    display: block;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center;
+    align-content: center;
     width: 90%;
-    margin: 5% 1%;
+    margin: 5% 1%
 }
 .most .list .p p{
     font-weight: 300;

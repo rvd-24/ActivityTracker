@@ -86,7 +86,7 @@ def sendchartdata(request):
             todayminutes=0
             todayhour=0
             todaysec=0
-            print(activetime)
+            # print(activetime)
             for d in activetime:
                 todayminutes+=d['minutes']
                 todaysec+=d['seconds']
@@ -94,7 +94,6 @@ def sendchartdata(request):
                 # for key in d.keys(): 
                 #     print("Key: {}, value: {}".format(key, d[key]))
             senddata={}
-            print(todaysec,todayminutes)
             senddata['opentabs']=opentabs
             senddata['closedtabs']=closedtabs
             senddata['activetime']=activetime

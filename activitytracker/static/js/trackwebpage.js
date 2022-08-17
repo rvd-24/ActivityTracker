@@ -60,8 +60,6 @@ setInterval(function submithandler(){
                     alert('The user selected ' + value);
                 }
                 }
-                todaydata=document.getElementById('todaydata');
-                todaydata.innerHTML=recvmsg.todayhour+" h"+" "+recvmsg.todayminutes+" m ";
             },
         error: function(){
             console.log("json not found");

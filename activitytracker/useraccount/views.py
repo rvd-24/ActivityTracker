@@ -41,17 +41,16 @@ def register(request):
             elif User.objects.filter(email=email).exists():
                 messages.info(request,'Email address registered')
                 return redirect('register')
-            
             else:
                 user=User.objects.create_user(password=password,email=email,username=username)
                 user.save();
-                print("user created");
-                
+                print("user created");   
         else:
             messages.info(request,"Passwords doesn' match")
             print("Password doesn't match")
             return redirect('register')
-        
+        user=auth.authenticate(email=email,password=password)
+        auth.login(request,user)
         return redirect('home');
     else:
         print("Don't match ")

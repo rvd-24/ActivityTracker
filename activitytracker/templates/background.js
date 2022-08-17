@@ -64,7 +64,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     tabdata.closetabs.pop();
     for(i=0;i<tabs.length;i++){
         console.log(tabs[i].id+tabs[i].url)
-        tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:JSON.stringify(new Date())});
+        tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
     }
     chrome.tabs.onActivated.addListener(function(tab){
         hour=0
@@ -113,7 +113,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                     tabdata.activetime[i].seconds=parseInt(tabtime.seconds);
                     tabdata.activetime[i].millisec=parseInt(tabtime.millisec);
                     tabidexists=true;
-                    console.log(tabdata.activetime[i].seconds);
+                    // console.log(tabdata.activetime[i].seconds);
                 }
             }
             if(tabidexists===false){
@@ -147,7 +147,9 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         }
         if(tabexists===false){
             var d=new Date();
-            tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
+            if(tab.url!='chrome://newtab/'){
+                tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
+            }
         }
     
         console.log(tabdata.opentabs);

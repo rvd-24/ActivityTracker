@@ -1,4 +1,19 @@
-const t= new Set();
+loginbtn=document.getElementById("loginbtn");
+registerbtn=document.getElementById("registerlink");
+loginbtn.onclick = function () {
+    chrome.tabs.create({url: 'http://127.0.0.1:8000/useraccount/login'});
+};
+registerbtn.onclick=function(){
+    chrome.tabs.create({url:'http:/127.0.0.1:8000/useraccount/register'});
+}
+
+
+
+
+
+
+
+/*const t= new Set();
 var serverhost = 'http://127.0.0.1:8000';
 var currTabs="";
 chrome.tabs.query({active:true,currentWindow:true},gotTabs);
@@ -130,4 +145,4 @@ port.onMessage.addListener(function(msg) {
 //         console.log(Tabsobj[i].url);
 //         tabsurl+="<li>"+Tabsobj[i].url+"\n"+"</li>";
 */
-})
+//})

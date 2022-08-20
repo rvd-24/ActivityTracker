@@ -123,8 +123,10 @@ def index(request):
           for j in range(len(mostused)):
             if(mostused[j]['id']==opentabs[i]['id']):
               mostused[j]['url']=opentabs[i]['url']
+              mostused[j]['url']=mostused[j]['url'][:30]
 
         print("MostUsed:",mostused)
+        mostused=mostused[:5]
         senddata['opentabs']=opentabs
         senddata['closedtabs']=closedtabs
         senddata['activetime']=activetime

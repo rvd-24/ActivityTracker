@@ -5,6 +5,9 @@
     text-align: center;
     font-family: 'Poppins', sans-serif;
 }
+body{
+    background: #EBEBEB;
+}
 
 .header{
     display: flex;
@@ -13,6 +16,7 @@
     align-items: center;
     padding-top: 1%;
     padding-bottom: 1%;
+    background: white;
 }
 .left{
     display: flex;
@@ -70,9 +74,6 @@
 .right a{
     text-decoration: none;
     color: white;
-}
-.content{
-    background: #EBEBEB;
 }
 .display{
     display: flex;
@@ -185,7 +186,6 @@
     border: 1px solid #A9A9A9;
     padding: 0.5% 2%;
     border-radius: 10px;
-    margin-right: 10%;
 }
 .graph #drop1ele{
     display: none;
@@ -202,16 +202,20 @@
     font-size: 20px;
     line-height: 30px;
 }
+#piechart1_3d{
+    display: none;
+}
 .chart {
     width: 1000px; 
-    min-height: 600px;
+    height: 330px;
+    margin-left: -5%;
+    overflow: auto;
 }
 .most{
     background: white;
     width: 33%;
     margin-right: 4%;
     border-radius: 20px;
-    overflow: hidden;
 }
 
 .most .head{
@@ -220,7 +224,6 @@
     justify-content: space-between;
     align-items: center;
     padding: 2% 5%;
-    margin-top: 2%;
 }
 .most .head h1{
     font-weight: 400;
@@ -244,7 +247,6 @@
     border: 1px solid #A9A9A9;
     padding: 0.5% 2%;
     border-radius: 10px;
-    margin-right: 10%;
 }
 .most #drop2ele{
     display: none;
@@ -261,61 +263,45 @@
     font-size: 20px;
     line-height: 30px;
 }
+#list2{
+    display: none;
+}
 .most .list{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 10%;
-    margin-bottom: 6%;
+    margin-top:5%;
+    margin-bottom: 3%;
 }
 .most .list hr{
-    width: 90%;
+    width: 87%;
     border: 0.5px solid #D9D9D9;
-    margin: 3% 1%;
+    margin: 1% 1%;
 }
 .most .list .p{
-    display: block;
+    display: flex;
     flex-direction: row;
-    justify-content: center;
-    align-content: center;
-    width: 90%;
-    margin: 5% 1%
+    justify-content: space-between;
+    align-items: center;
+    width: 86%;
+    margin: 0% 1%;
 }
 .most .list .p p{
-    font-weight: 300;
-    font-size: 20px;
-    line-height: 42px;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 36px;
     color: #000000
 }
 .most .list .p h3{
-    font-weight: 500;
-    font-size: 32px;
+    font-weight: 800;
+    font-size: 24px;
     line-height: 48px;
     color: #000000;
 }
-@media screen and (max-width:1280px) {
-    .right{
-        margin-right: 7%;
-    }
-}
 
-@media  screen and (max-width:590px) {
-    .left p{
-        font-size: 28px;
-    }
-}
+
 @media screen and (max-width:480px) {
-    .header{
-        display: flex;
-        flex-direction: column;
-    }
-    .left{
-        margin-left: 0%;
-    }
-    .left p{
-        margin-left: 10px;
-    }
     .para h4{
         font-size: 20px;
     }
@@ -329,6 +315,13 @@
         width: 100px;
     }
 }
+
+@media screen and (max-width:1280px) {
+    .right{
+        margin-right: 7%;
+    }
+}
+
 @media screen and (max-width:1070px) {
     .display{
         display: flex;
@@ -363,13 +356,131 @@
 }
 @media screen and (max-width:1265px) {
     .chart{
-        width: 80%;
-        min-height: 250px;
+        margin-left: -10%;
     }
 }
 @media screen and (max-width:1020px) {
     .chart{
         width: 50%;
         min-height: 150px;
+    }
+}
+@media screen and (max-width:1330px) {
+    .display2{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 2% 15%;
+    }
+    .most{
+        margin-top: 25px;
+        width: 100%;
+        margin-left: 8%;
+    }
+    .graph{
+        width: 100%;
+    }
+}
+@media screen and (max-width:1100px) {
+     .chart{
+        width: 800px;
+        height: 350px;
+     }
+}
+@media screen and (max-width:900px) {
+    .chart{
+        width: 600px;
+        height:300px;
+        margin-left: -5%;
+    }
+    .display2{
+        margin: 2% 8% ;
+    }
+    .right{
+        margin-right: 10%;
+    }
+}
+@media screen and (max-width:760px) {
+    .chart{
+        margin-left: -10%;
+    }
+    .header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .right{
+        margin-right: 0%;
+        margin-top: 5%;
+        margin-left: 7%;
+    }
+}
+@media screen and (max-width:700px) {
+    .display2{
+        margin: 2% 5% 2% 0%;
+    }
+}
+@media screen and (max-width:540px) {
+    .chart{
+        width: 450px;
+        height: 300px;
+    }
+}
+@media screen and (max-width:400px) {
+    .chart{
+        width: 300px;
+        height: 200px;
+        margin-left: 3%;
+    }
+    .most .list .p p{
+        font-size: 16px;
+    }
+    .most .list .p h3{
+        font-size: 20px;
+    }
+}
+@media screen and (max-width:500px) {
+    .graph .head h1 {
+        font-size: 30px;
+    }
+}
+@media screen and (max-width:420px) {
+    .graph .head h1 {
+        font-size: 26px;
+    }
+    .most .head h1{
+        font-size: 28px;
+    }
+}
+@media screen and (max-width:380px) {
+    .graph .head {
+        flex-direction: column;
+    }
+    .most .head{
+        flex-direction: column;
+    }
+    .left p{
+        font-size: 24px;
+    }
+    .right button{
+        font-size: 16px;
+        padding: 0% 10%;
+    }
+    .right p{
+        font-size: 24px;
+        padding: 0% 10%;
+        padding-top: -2%;
+        padding-bottom: -2%;
+    }
+}
+@media screen and (max-width:300px) {
+    .most .list .p{
+        flex-direction: column;
+        justify-content: center;
+    }
+    .right{
+        margin-left: 0%;
     }
 }

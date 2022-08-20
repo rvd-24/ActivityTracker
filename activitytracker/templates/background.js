@@ -176,7 +176,6 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                     }
                 }    
             }*/
-              
     }
     console.log(tabdata.activetime);
     });

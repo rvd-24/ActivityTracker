@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 # Create your views here.
 def home(request):
-    return render(request,"trackwebpage.html")
+    return render(request,"indexw.html")
 def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 from django.views.decorators.csrf import csrf_exempt
@@ -103,4 +103,4 @@ def sendchartdata(request):
             Tabdetails=[opentabs,closedtabs,activetime]
             return HttpResponse(json.dumps(senddata), content_type="application/json")
     else:
-        return HttpResponse('trackwebpage.html')
+        return HttpResponse('indexw.html')

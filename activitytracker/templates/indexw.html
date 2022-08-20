@@ -8,10 +8,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Activity Tracker</title>
-    <link rel="stylesheet" href="{% static 'styles/indexstyle.css'%}">
+    <link rel="stylesheet" href="{% static 'styles/stylew.css'%}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="{%static 'js/trackwebpage.js'%}"></script>
 </head>
 <body>
     <div class="header">
@@ -22,7 +21,9 @@
         <div class="right">
             <button id="limit"><a href="#" >Set&nbsp;Limits</a></button>
             <button><a href="{% url 'logout' %}">Logout</a></button>
-            <p id="user">g</p>
+            <p id="user">{%if user.is_authenticated%}
+                {{user.username|make_list|first}}
+             {%endif%}</p>
         </div>
     </div>
     <div class="content">
@@ -30,7 +31,7 @@
             <div class="box">
                 <div class="para">
                     <h4>Today</h4>
-                    <h3 id="todaydata">{{senddata.todayhour}}h&nbsp;&nbsp;{{senddata.todayminutes}}m</h3>
+                    <h3>{{senddata.todayhour}}h&nbsp;&nbsp;{{senddata.todayminutes}}m</h3>
                     <div class="past">
                         <h4 id="val1">+10%</h4>
                         <p>yesterday</p>
@@ -38,7 +39,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <!-- <img src="{% static 'images/inc.png'%}" id="g1" alt="increase"> -->
+                    <img id="g1" src="{% static 'images/inc.png'%}" alt="increase">
                 </div>
             </div>
             <div class="box">
@@ -52,7 +53,7 @@
                     </div>
                 </div>
                 <div class="line">
-                    <!-- <img src="{% static 'images/dec.png'%}" id="g2" alt="decrease"> -->
+                    <img id="g2" src="{% static 'images/dec.png'%}" alt="decrease">
                 </div>
             </div>
         </div>
@@ -61,27 +62,29 @@
                 <div class="head">
                     <h1 id="graphhead">Today's Activity</h1>
                     <div class="dropm1">
-                        <a id="drop1">Today &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow1"></a>
+                        <a id="drop1"><span id="gopt1">Today</span> &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow1"></a>
                     <div id="drop1ele">
                         <hr>
-                        <a>This week</a>
+                        <a id="gopt2" onclick="change();">This week</a>
                     </div>
                     </div>
                 </div>
-                <div id="chart_div" class="chart"></div>
+                <div id="piechart_3d" class="chart"></div>
+                <div id="piechart1_3d" class="chart"></div>
             </div>
             <div class="most">
                 <div class="head">
                     <h1 id="mosthead">Most used</h1>
                     <div class="dropm2">
-                        <a id="drop2">Today &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow2"></a>
+                        <a id="drop2"><span id="mopt1">Today</span> &nbsp;<img src="{% static 'images/arrow.png'%}" alt="arrow" id="arrow2"></a>
                     <div id="drop2ele">
                         <hr>
-                        <a>This week</a>
+                        <a id="mopt2" onclick="change1();">This week</a>
                     </div>
                     </div>
                 </div>
-                <div class="list">
+                <div class="list" id="list1">
+                    
                     {%for url in mostused%}
                     <hr>
                     <div class="p"><p>{{url.url}}&nbsp;<b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
@@ -90,6 +93,6 @@
             </div>
         </div>
     </div>
-    <script src="{%static 'js/src.js'%}"></script>
-    </body>
+    <script src="{%static 'js/srcw.js'%}"></script>
+</body>
 </html>

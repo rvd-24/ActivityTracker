@@ -41,7 +41,7 @@ setInterval(function submithandler(){
                 
                     */
                 var options = {
-                    title: 'My Pie Chart',
+                    title: 'Pie Chart',
                     width: 600,
                     height: 600,
                     responsive:true

@@ -124,6 +124,10 @@ def index(request):
             if(mostused[j]['id']==opentabs[i]['id']):
               mostused[j]['url']=opentabs[i]['url']
               mostused[j]['url']=mostused[j]['url'][:30]
+              if(mostused[j]['url'][:7]=="http://"):
+                mostused[j]['url']=mostused[j]['url'][7:30]
+              elif(mostused[j]['url'][:8]=="https://"):
+                mostused[j]['url']=mostused[j]['url'][8:30]
 
         print("MostUsed:",mostused)
         mostused=mostused[:5]
@@ -153,9 +157,9 @@ def index(request):
         # print(senddata)
         print(datetime.now())
         Tabdetails=[opentabs,closedtabs,activetime]
-        return render(request,'trackwebpage.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostused':mostused})
+        return render(request,'indexw.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostused':mostused})
     else:
-        return render(request,'trackwebpage.html')
+        return render(request,'indexw.html')
 
 
 #Trash Code

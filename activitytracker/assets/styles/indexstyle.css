@@ -185,6 +185,7 @@
     width: 33%;
     margin-right: 4%;
     border-radius: 20px;
+    overflow: hidden;
 }
 
 .most .head{

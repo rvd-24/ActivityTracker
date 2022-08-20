@@ -65,7 +65,7 @@ setInterval(function submithandler(){
             console.log("json not found");
         }
     })
-},10000);
+},3000);
 
 /*google.charts.load("current", {packages:["corechart"]});
 google.charts.setOnLoadCallback(drawChart);

@@ -66,11 +66,50 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         console.log(tabs[i].id+tabs[i].url)
         tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
     }
+    chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
+        tabexists=false;
+        for(var i=0;i<tabdata.opentabs.length;i++){
+            if(tabdata.opentabs[i].id===tab.id && tabdata.opentabs[i].url===tab.url){
+                tabexists=true;
+            }
+        }
+        if(tabexists===false){
+            var d=new Date();
+            if(tab.url!='chrome://newtab/'){
+                tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
+            }
+        }
+    
+        console.log(tabdata.opentabs);
+    });
+    
+    chrome.tabs.onRemoved.addListener(function(tab){
+        console.log(tab);
+        for(var i=0;i<tabdata.opentabs.length;i++){
+            if(tabdata.opentabs[i].id===tab){
+                var closedate=new Date();
+                var totaltime=(closedate-tabdata.opentabs[i].opentime)/1000;
+                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date(),totaltime:totaltime})
+                tabexists=true;
+            }
+        } 
+    });
     chrome.tabs.onActivated.addListener(function(tab){
-        hour=0
-        minute=0
-        second=0
-        milliseconds=0    
+        for(var i=0;i<tabdata.activetime.length;i++){
+            if(tabdata.activetime[i].id===tab.tabId){
+                hour=tabdata.activetime[i].hours
+                minute=tabdata.activetime[i].minutes
+                second=tabdata.activetime[i].seconds
+                milliseconds=tabdata.activetime[i].millisec
+            }
+            else{
+                console.log(tab.tabId);
+                hour=0
+                minute=0
+                second=0
+                milliseconds=0
+            }
+        }
         console.log("Tab Changed");
         if(int!==null){
             clearInterval(int);
@@ -119,52 +158,27 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
             if(tabidexists===false){
                 tabdata.activetime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds),millisec:parseInt(tabtime.millisec)});
             }
-            for(var i=0;i<tabdata.activetime.length;i++){
-                if(tabdata.activetime[i].id===tab.tabId){
-                    if(tabdata.activetime[i].millisec == 1000){
-                        tabdata.activetime[i].millisec = 0;
-                        tabdata.activetime[i].seconds++;
-                    if(tabdata.activetime[i].seconds == 60){
-                        tabdata.activetime[i].seconds = 0;
-                        tabdata.activetime[i].minutes++;
-                        if(tabdata.activetime[i].minutes == 60){
-                            tabdata.activetime[i].minutes = 0;
-                            tabdata.activetime[i].hours++;
+            /*if(tabidexists===true){
+                for(var i=0;i<tabdata.activetime.length;i++){
+                    if(tabdata.activetime[i].id===tab.tabId){
+                        if(tabdata.activetime[i].millisec == 1000){
+                            tabdata.activetime[i].millisec = 0;
+                            tabdata.activetime[i].seconds++;
+                        if(tabdata.activetime[i].seconds == 60){
+                            tabdata.activetime[i].seconds = 0;
+                            tabdata.activetime[i].minutes++;
+                            if(tabdata.activetime[i].minutes == 60){
+                                tabdata.activetime[i].minutes = 0;
+                                tabdata.activetime[i].hours++;
+                            }
                         }
                     }
-                }
-                }
-            }  
+                    }
+                }    
+            }*/
+              
     }
     console.log(tabdata.activetime);
-    });
-    chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
-        tabexists=false;
-        for(var i=0;i<tabdata.opentabs.length;i++){
-            if(tabdata.opentabs[i].id===tab.id && tabdata.opentabs[i].url===tab.url){
-                tabexists=true;
-            }
-        }
-        if(tabexists===false){
-            var d=new Date();
-            if(tab.url!='chrome://newtab/'){
-                tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
-            }
-        }
-    
-        console.log(tabdata.opentabs);
-    });
-    
-    chrome.tabs.onRemoved.addListener(function(tab){
-        console.log(tab);
-        for(var i=0;i<tabdata.opentabs.length;i++){
-            if(tabdata.opentabs[i].id===tab){
-                var closedate=new Date();
-                var totaltime=(closedate-tabdata.opentabs[i].opentime)/1000;
-                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date(),totaltime:totaltime})
-                tabexists=true;
-            }
-        } 
     });
     setInterval(function submithandler(){
             console.log("Sending ajax request");

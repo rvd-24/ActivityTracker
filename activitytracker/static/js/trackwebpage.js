@@ -41,7 +41,7 @@ setInterval(function submithandler(){
                 
                     */
                 var options = {
-                    title: 'My Pie Chart',
+                    title: 'Pie Chart',
                     width: 600,
                     height: 600,
                     responsive:true
@@ -65,7 +65,7 @@ setInterval(function submithandler(){
             console.log("json not found");
         }
     })
-},10000);
+},3000);
 
 /*google.charts.load("current", {packages:["corechart"]});
 google.charts.setOnLoadCallback(drawChart);

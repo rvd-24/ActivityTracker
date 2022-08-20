@@ -37,7 +37,7 @@
                     <div class="past">
                         <h4 id="val1">+10%</h4>
                         <p>yesterday</p>
-                        <h5>5h 20m</h5>
+                        <h5>{{senddata.yesterdayhour}}h&nbsp;{{senddata.yesterdayminutes}}m</h5>
                     </div>
                 </div>
                 <div class="line">
@@ -47,11 +47,11 @@
             <div class="box">
                 <div class="para">
                     <h4>This week</h4>
-                    <h3>46h 20m</h3>
+                    <h3>{{senddata.thisweekhour}}h&nbsp;{{senddata.thisweekminutes}}m</h3>
                     <div class="past">
                         <h4 id="val2">-17%</h4>
                         <p>last week</p>
-                        <h5>55h 20m</h5>
+                        <h5>{{senddata.lastweekhour}}h&nbsp;{{senddata.lastweekminutes}}m</h5>
                     </div>
                 </div>
                 <div class="line">
@@ -85,9 +85,9 @@
                     </div>
                 </div>
                 <div class="list">
-                    {%for url in opentabs%}
+                    {%for url in mostused%}
                     <hr>
-                    <div class="p"><p>{{url.url}}</p></div>
+                    <div class="p"><p>{{url.url}}&nbsp;<b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
                     {% endfor %}
                 </div>
             </div>

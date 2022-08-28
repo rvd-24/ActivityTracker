@@ -128,9 +128,12 @@ def index(request):
                 mostused[j]['url']=mostused[j]['url'][7:30]
               elif(mostused[j]['url'][:8]=="https://"):
                 mostused[j]['url']=mostused[j]['url'][8:30]
-
+        finalmostused=[]
         print("MostUsed:",mostused)
-        mostused=mostused[:5]
+        for d in range(len(mostused)):
+          if "url" in mostused[d]:
+            finalmostused.append(mostused[d])
+        finalmostused=finalmostused[:5]
         senddata['opentabs']=opentabs
         senddata['closedtabs']=closedtabs
         senddata['activetime']=activetime
@@ -150,14 +153,14 @@ def index(request):
         #Last Week
         senddata['lastweekhour']=lastweekhour
         senddata['lastweekminutes']=lastweekminutes
-        print(senddata['yesterdaytotaltime'])
-        print(senddata['todaytotaltime'])
-        print(senddata['thisweekhour'])
-        print(senddata['thisweekminutes'])
+        print("yesterdaytotaltime",senddata['yesterdaytotaltime'])
+        print("todaytotaltime",senddata['todaytotaltime'])
+        print("thisweekhour",senddata['thisweekhour'])
+        print("thisweekminutes",senddata['thisweekminutes'])
         # print(senddata)
-        print(datetime.now())
+        # print(datetime.now())
         Tabdetails=[opentabs,closedtabs,activetime]
-        return render(request,'indexw.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostused':mostused})
+        return render(request,'indexw.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostused':finalmostused})
     else:
         return render(request,'indexw.html')
 

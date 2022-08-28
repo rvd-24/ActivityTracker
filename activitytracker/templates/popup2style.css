@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;800&display=swap');
+body{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 450px;
+    height: max-content;
+    font-family: 'Poppins', sans-serif;
+    background: #EBEBEB;
+}
+.contents{
+    display: flex;
+    flex-direction: column;
+}
+h1{
+    text-align: center;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 42px;
+    color: #292929;
+}
+.chart{
+    background: white;
+    width: 350px;
+    box-shadow: 2px 2px 80px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.chart p{
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 36px;
+    color: #676767;
+    margin-left: 30px;
+}
+.chart h2{
+    font-weight: 600;
+    font-size: 40px;
+    line-height: 60px;
+    margin-left: 30px;
+    margin-top: -20px;
+}
+.chart .graph{
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+h3{
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 30px;
+    color: #2E2E2E;
+}
+.current{
+    width: 350px;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 2px 2px 80px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    height: 50px;
+    margin-top: -10px;
+}
+.current #name{
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 36px;
+    color: #626262;
+    margin-left: 10px;
+}
+.current #time{
+    font-weight: 500;
+    font-size: 19px;
+    line-height: 36px;
+    color: #000000;
+    margin-right: 10px;
+}
+button{
+    width: 350px;
+    height: 50px;
+    background: #FFFFFF;
+    box-shadow: 2px 2px 80px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    border: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+button a{
+    text-decoration: none;
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 36px;
+    color: #626262;
+    margin-left: -10px;
+    transition: 0.5s;
+}
+button a img{
+    width: 7.95px;
+    height: 16.5px;
+    margin-left: 50px;
+    transition: 0.5s;
+}
+button:hover{
+    background: #ebcbcb;
+}
+button:hover a img{
+    margin-left: 60px;
+}

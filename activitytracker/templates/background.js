@@ -33,39 +33,41 @@ let tabtime={
 function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
-
+var tabdata={
+    "opentabs":[{
+        "id":"",
+        "url":"",
+        "opentime":""
+    }],
+    "closetabs":[{
+        "id":"",
+        "url":"",
+        "closetime":"",
+        "totaltime":""
+    }],
+    "activetime":[{
+        "id":"",
+        "hours":0,
+        "minutes":0,
+        "seconds":0,
+        "millisec":0
+    }]
+} 
 
 chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
     let timerRef = document.querySelector('.timerDisplay');
     let int = null;
 
-    var tabdata={
-        "opentabs":[{
-            "id":"",
-            "url":"",
-            "opentime":""
-        }],
-        "closetabs":[{
-            "id":"",
-            "url":"",
-            "closetime":"",
-            "totaltime":""
-        }],
-        "activetime":[{
-            "id":"",
-            "hours":0,
-            "minutes":0,
-            "seconds":0,
-            "millisec":0
-        }]
-    } 
+    
     tabdata.opentabs.pop();
     tabdata.closetabs.pop();
     for(i=0;i<tabs.length;i++){
-        console.log(tabs[i].id+tabs[i].url)
-        tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
+        if(tabs[i].url!='chrome://newtab/'&&tabs[i].url.includes("file://")===false){
+                tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
+            }
     }
+    console.log(tabdata.opentabs);
     chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
         tabexists=false;
         for(var i=0;i<tabdata.opentabs.length;i++){
@@ -75,11 +77,10 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         }
         if(tabexists===false){
             var d=new Date();
-            if(tab.url!='chrome://newtab/'){
+            if(tab.url!='chrome://newtab/'&&tab.url.includes("file://")===false){
                 tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
             }
         }
-    
         console.log(tabdata.opentabs);
     });
     
@@ -179,6 +180,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     }
     console.log(tabdata.activetime);
     });
+     
     setInterval(function submithandler(){
             console.log("Sending ajax request");
             $.ajax({
@@ -197,11 +199,18 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                     alert("Submitted")
                   }
                   }
-            }) 
+            })
         },10000);
+        
 });
 
-
+chrome.extension.onConnect.addListener(function(port) {
+    console.log("Connected .....");
+    port.onMessage.addListener(function(msg) {
+        console.log("message recieved" + msg);
+        port.postMessage(tabdata);
+    });
+})
 chrome.tabs.query({windowType:'normal'}, function(tabs) {
     // console.log('Number of open tabs in all normal browser windows:',tabs);
     /*for(i=0;i<tabs.length;i++){
@@ -249,13 +258,6 @@ chrome.tabs.query({windowType:'normal'}, function(tabs) {
             console.log(openTabs);
         });
         */
-        chrome.extension.onConnect.addListener(function(port) {
-            console.log("Connected .....");
-            port.onMessage.addListener(function(msg) {
-                 console.log("message recieved" + msg);
-                 port.postMessage(message+")(*&^%$#@!"+closingm+")(*&^%$#@!"+JSON.stringify(tabtime));
-            });
-        })
 
 });
 

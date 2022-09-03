@@ -23,57 +23,57 @@ def update_tabs(request):
             tabs = request.POST.get('stuff',False)
             t=json.loads(tabs)
             opentabs=t['opentabs']
-            # print(opentabs)
-            # for x in opentabs:
-            #     print(x['id'])
-            # print(opentabs)
             close=t['closetabs']
             active=t['activetime']
-            # print("CLOSE",t['closetabs'])
-            # print("TIME",t['activetime'])
-            # for key,value in t.items():
-            #     print(key ,value)
-            Open=t['opentabs']
-            close=t['closetabs']
-            active=t['activetime']
+            x={}
             senddata+=str(opentabs)+";"+str(close)+";"+str(active)+";"
             if request.user.is_authenticated:
                 print('User'+request.user.email+" : ",user_exists(request.user.email))
                 if user_exists(request.user.email) and trackdetails.objects.filter(email=request.user.email).exists():
                     print("Updated stored details")
                     stuff=trackdetails.objects.get(email=request.user.email)
-                    stuff.opentabs=str(opentabs)
+                    stuff.opentabs=eval(stuff.opentabs)
+                    print("Stuff.opentabs",stuff.opentabs)
+                    print("OPent",opentabs)
+                    # stuff.opentabs.append(str(opentabs))
+                    # stuff.closetabs=eval(stuff.closetabs)
+                    # stuff.closetabs.append(str(stuff.closetabs))
+                    # stuff.activetime=eval(stuff.activetime)
+                    # stuff.activetime.append(str(stuff.activetime))
+                    # for i in stuff.opentabs:
+                    # for i in opentabs:
+                    #     stuff.opentabs.append(i)
+                    # for j in stuff.opentabs:
+                    #     for i in opentabs:
+                    #         if(i['id']==j['id'] and i['url']!=j['url']):
+                    #             print("Same id",i)
+                    #         elif (i['id'] not in j):
+                    #                 print("DifferentID",i)
+
+                    lst=[x for x in opentabs if x not in stuff.opentabs]
+                    print("lst",lst)
+                    for i in lst:
+                        stuff.opentabs.append(i)
+                    # print(stuff.opentabs)
+                    # stuff.opentabs=str(stuff.opentabs)                    
+                    # stuff.opentabs=str(opentabs)
+                    stuff.opentabs=str(stuff.opentabs)
                     stuff.closetabs=str(close)
                     stuff.activetime=str(active)
-                    # print(stuff.activetime)
                     stuff.email=request.user.email
                     # stuff=trackdetails(opentabs=str(Open),closetabs=str(close),activetime=str(active),email=request.user.email)
                     stuff.save()
+                    print(request.user.username)
                 else:
                     print("Saved stuff")
-                    stuff=trackdetails(opentabs=str(Open),closetabs=str(close),activetime=str(active),email=request.user.email)
+                    stuff=trackdetails(opentabs=str(opentabs),closetabs=str(close),activetime=str(active),email=request.user.email)
                     stuff.save()
                 print(request.user.email)
-                # user=User.objects.get(email=request.user.email)
-                # print(user.email)
-                # stuff.save()
-           
-        # try:
-        #     print(tabs)
-        # except trackdetails.DoesNotExist:
-        #     tabs=None
-        # tabs.name =  request.POST['currTabs']
-        # tabs.save()
-    # if request.is_ajax():
-    #     form=ContactModelForm(request.POST)
-    #     if form.is_valid():
-    #         form.save()
-    #         return JsonResponse({
-    #             "msg":"Success"
-    #         })
-    # print("HIUIII")
-    # print("Senddata")
-    return HttpResponse("Update successful!")
+                print(request.user)
+    if request.user.is_authenticated:
+        return HttpResponse(request.user.username)
+    else:
+        return HttpResponse("Not logged in")
 
 def sendchartdata(request):
     if request.method=='GET':
@@ -104,3 +104,4 @@ def sendchartdata(request):
             return HttpResponse(json.dumps(senddata), content_type="application/json")
     else:
         return HttpResponse('indexw.html')
+

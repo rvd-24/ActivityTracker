@@ -26,21 +26,26 @@ setInterval(function cleantabs(){
 console.log(openturl);
 console.log(opentabs);
 var txt=""
-for(var i=0;i<opentabs.length;i++){
-   if(opentabs[i].url.includes("https://")){
-      tab[i].url=opentabs[i].url;
-      opentabs[i].url=opentabs[i].url.slice(8,28);
-   }
-   else if(opentabs[i].url.includes("http://")){
-      tab[i].url=opentabs[i].url;
-      opentabs[i].url=opentabs[i].url.slice(7,28);
-   }
-}
 console.log(tab);
 for(var i=0;i<opentabs.length;i++){
-   for(var j=0;j<activetime.length;j++){
+   for(var j=0;j<activetime.length;j++){ 
       if(opentabs[i].id===activetime[j].id){
-         txt+="<br><div class='current'>"+"<p title='"+openturl[i].url+"' id='name'>"+opentabs[i].url.slice(0,30)+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
+            /*if(opentabs[i].url.includes("https://")){
+               tab[i].url=opentabs[i].url;
+               opentabs[i].url=opentabs[i].url.slice(8,28);
+            }
+            else if(opentabs[i].url.includes("http://")){
+               tab[i].url=opentabs[i].url;
+               opentabs[i].url=opentabs[i].url.slice(7,28);
+            }*/
+            var taburl=opentabs[i].url;
+            if(taburl.includes("https://")){
+               taburl=taburl.slice(8,28);
+            }
+            else if(taburl.includes("http://")){
+               taburl=taburl.slice(7,28);
+            }
+         txt+="<br><div class='current'>"+"<p title='"+opentabs[i].url+"' id='name'>"+taburl.slice(0,30)+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
          opent.innerHTML=txt;
       }      
    }
@@ -48,9 +53,19 @@ for(var i=0;i<opentabs.length;i++){
 
 const labels = [];
 for(var i=0;i<opentabs.length;i++){
-   labels.push(opentabs[i].url);
+   var taburl=opentabs[i].url;
+            if(taburl.includes("https://")){
+               taburl=taburl.slice(8,28);
+            }
+            else if(taburl.includes("http://")){
+               taburl=taburl.slice(7,28);
+            }
+   labels.push(taburl);
 }
-console.log("labels",labels);
+
+
+
+console.log("labels",opentabs);
 time=[]
 const value=[];
 var sec=0
@@ -101,9 +116,6 @@ const config = {
 }
 };
 const myChart = new Chart(document.getElementById('myChart'),config);
-
-
-
 });
 
 var today=new Date();

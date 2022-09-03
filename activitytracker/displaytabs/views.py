@@ -47,11 +47,11 @@ def getDuration(then, now = datetime.now(), interval = "default"):
 def index(request):
     if request.user.is_authenticated and trackdetails.objects.filter(email=request.user.email).exists():
         tabdetails=trackdetails.objects.get(email=request.user.email)
-        print("TabDetails\n",tabdetails,"\n")
+        # print("TabDetails\n",tabdetails,"\n")
         opentabs=eval(tabdetails.opentabs)
         closedtabs=eval(tabdetails.closetabs)
         activetime=eval(tabdetails.activetime)
-        print("OPENTABS",opentabs)
+        # print("OPENTABS",opentabs)
         
         todayminutes=0
         todayhour=0
@@ -89,9 +89,8 @@ def index(request):
             out = datetime.strptime(s, f)
             ds={"opentime":out,"id":i['id'],"url":i['url']}
             opent.append(ds)
-        print("OPENTIME")
+        # print("OPENTIME")
         senddata={}
-        print(opent[1]["opentime"])
         for i in range(len(opent)):
             print(getDuration(opent[i]['opentime'])['days'])
             if(getDuration(opent[i]['opentime'])['days']>0 and getDuration(opent[i]['opentime'])['days']<=1):
@@ -100,18 +99,18 @@ def index(request):
                 yesterdaysec+=getDuration(opent[i]['opentime'])['seconds']
 
             if(getDuration(opent[i]['opentime'])['days']<=7):
-                print("This Week Details")
+                # print("This Week Details")
                 # print(thisweekhour,opent[i]['opentime'],getDuration(opent[i]['opentime']))
                 for j in range(0,len(activetime)):
                   # print("ACT",activetime[j]['id'])
                   # print("OPENT",opent[i]['id'])
                   if(activetime[j]['id']==opent[i]['id']):
-                    print("activetime:",activetime[j])
+                    # print("activetime:",activetime[j])
                     thisweekhour+=activetime[j]['hours']
                     thisweekminutes+=activetime[j]['minutes']
                 
             if(getDuration(opent[i]['opentime'])['days']>=8 and getDuration(opent[i]['opentime'])['days']<15):
-                print("LastWeek",getDuration(opent[i]['opentime'])['hours'])
+                # print("LastWeek",getDuration(opent[i]['opentime'])['hours'])
                 lastweekhour+=getDuration(opent[i]['opentime'])['hours']
                 lastweekminutes+=getDuration(opent[i]['opentime'])['minutes']
         
@@ -129,7 +128,7 @@ def index(request):
               elif(mostused[j]['url'][:8]=="https://"):
                 mostused[j]['url']=mostused[j]['url'][8:30]
         finalmostused=[]
-        print("MostUsed:",mostused)
+        # print("MostUsed:",mostused)
         for d in range(len(mostused)):
           if "url" in mostused[d]:
             finalmostused.append(mostused[d])

@@ -34,6 +34,7 @@ function getKeyByValue(object, value) {
     return Object.keys(object).find(key => object[key] === value);
 }
 var tabdata={
+    "user_authenticated":"",
     "opentabs":[{
         "id":"",
         "url":"",
@@ -53,7 +54,6 @@ var tabdata={
         "millisec":0
     }]
 } 
-
 chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
     let timerRef = document.querySelector('.timerDisplay');
@@ -200,8 +200,27 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                   }
                   }
             })
-        },10000);
-        
+            /*$.ajax({
+                type:"GET",
+                url:"http://127.0.0.1:8000/update_tabs/",
+                dataType:"text",
+                success: function(recvmsg) {
+                    tabdata.user_authenticated=recvmsg;
+                }
+            })*/
+        },5000);
+        setInterval(function submithandler(){
+            $.ajax({
+                type:"GET",
+                url:"http://127.0.0.1:8000/update_tabs/",
+                dataType:"text",
+                success: function(recvmsg) {
+                    tabdata.user_authenticated=recvmsg;
+                    console.log("Receiving ajax request");
+                }
+            })
+        },5000);
+    
 });
 
 chrome.extension.onConnect.addListener(function(port) {
@@ -211,55 +230,6 @@ chrome.extension.onConnect.addListener(function(port) {
         port.postMessage(tabdata);
     });
 })
-chrome.tabs.query({windowType:'normal'}, function(tabs) {
-    // console.log('Number of open tabs in all normal browser windows:',tabs);
-    /*for(i=0;i<tabs.length;i++){
-        console.log(tabs[i].url);
-    }
-    */var message="";
-    var closingm="";
-    var urls = [];
-    var closedtaburls="";
-    
-    // console.log('Total Number of open tabs: '+JSON.stringify(tabs.length)+";"+JSON.stringify(tabs));
-    chrome.tabs.onActivated.addListener(function(tab) {
-        openTabs[tab.tabId] = new Date();   
-        /*console.log("Active tabID is:");
-        console.log(tab.tabId);
-        console.log(openTabs);*/
-        message+=";Active tabID is: "+JSON.stringify(tab.tabId)+';'+openTabs[tab.tabId];
-        
-    });
-    chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-        // console.log(changeInfo.url);
-        if (changeInfo.url) {
-            urls[tabId] = changeInfo.url;
-            // console.log(urls[tabId]);
-        }
-        closedtaburls+=changeInfo.url+";";
-        // console.log('Closed:',urls[tabId]);
-        // console.log(closedtaburls);
-    });
-    /*chrome.tabs.onRemoved.addListener(function(tab) {   
-            closeTabs[tab]=new Date();
-            console.log("Tab Closed");
-            
-            if (openTabs[tab]) {
-                console.log("Closed Tab Details");
-                console.log(closeTabs);
-                console.log((closeTabs[tab]-openTabs[tab])/1000);
-                var d=Object.values(closeTabs);
-                console.log(maxDate);
-                let keys = Object.keys(closeTabs).filter(k=>JSON.stringify(closeTabs[k])===JSON.stringify(maxDate));
-                console.log(keys);
-                closingm+="Closed Tab Details: ;"+keys+';'+"Close Time: "+maxDate+";"+"Time Active: "+(maxDate-openTabs[tab])/1000+"s"+";";
-                delete openTabs[tab];
-            }
-            console.log(openTabs);
-        });
-        */
-
-});
 
 /*Trash Code
 // const opent=new Set(tabdata.opentabs)

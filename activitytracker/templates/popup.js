@@ -11,15 +11,31 @@ var port = chrome.extension.connect({
 });
 port.postMessage("Hi BackGround");
 port.onMessage.addListener(function(msg) {
-console.log(msg.user_authenticated);
+console.log(msg.user_authenticated.length);
 let LoginButton = document.getElementById('loginbtn');
-
-LoginButton.addEventListener('click', function () {
-    if(msg.user_authenticated!="not logged in"){
-        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup2.html' });    
+if(msg.user_authenticated.length===0){
+    chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+}
+else{
+    if(msg.user_authenticated==="not logged in"){
+        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
     }
-    else if(msg.user_authenticated==""){
-        chrome.browserAction.setPopup({popup: 'activitytracker/templates/popup.html'});
+    else{
+        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup2.html' });    
+
+    }
+}
+LoginButton.addEventListener('click', function () {
+    if(msg.user_authenticated.length===0){
+        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+    }
+    else{
+        if(msg.user_authenticated==="not logged in"){
+            chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+        }
+        else{
+            chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup2.html' });   
+        }
     }
 });
 })

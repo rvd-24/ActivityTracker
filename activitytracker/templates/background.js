@@ -96,6 +96,10 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         } 
     });
     chrome.tabs.onActivated.addListener(function(tab){
+        hour=0
+        minute=0
+        second=0
+        milliseconds=0
         for(var i=0;i<tabdata.activetime.length;i++){
             if(tabdata.activetime[i].id===tab.tabId){
                 hour=tabdata.activetime[i].hours
@@ -103,13 +107,13 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                 second=tabdata.activetime[i].seconds
                 milliseconds=tabdata.activetime[i].millisec
             }
-            else{
+            /*else if(tabdata.activetime[i].id!==tab.tabId){
                 console.log(tab.tabId);
                 hour=0
                 minute=0
                 second=0
                 milliseconds=0
-            }
+            }*/
         }
         console.log("Tab Changed");
         if(int!==null){

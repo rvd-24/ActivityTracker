@@ -3,6 +3,7 @@ var port = chrome.extension.connect({
 });
 port.postMessage("Hi BackGround");
 port.onMessage.addListener(function(msg) {
+console.log("User:",msg.user_authenticated);
 var opentabs=msg.opentabs
 var closetabs=msg.closetabs;
 var activetime=msg.activetime;
@@ -10,23 +11,21 @@ var openturl=msg.opentabs;
 console.log(opentabs);
 console.log(closetabs);
 console.log(activetime);
-var tab=[]
-tab=opentabs
+var tab=msg.opentabs;
 activetime.splice(0,1);
 var opent=document.getElementById("opentab");
-setInterval(function cleantabs(){
-   for(var i=0;i<opentabs.length;i++){
-      for(var j=0;j<closetabs.length;j++){
-         if(closetabs[j].id===opentabs[i].id){
-            opentabs=opentabs.splice(i,1);
-         }
+for(var i=0;i<tab.length;i++){
+   for(var j=0;j<closetabs.length;j++){
+      if(closetabs[j].id===tab[i].id){
+         tab.splice(i,1)
       }
    }
-});
+}
 console.log(openturl);
-console.log(opentabs);
+console.log("open",opentabs);
+console.log("close",closetabs);
 var txt=""
-console.log(tab);
+console.log("tab",tab);
 for(var i=0;i<opentabs.length;i++){
    for(var j=0;j<activetime.length;j++){ 
       if(opentabs[i].id===activetime[j].id){
@@ -45,7 +44,7 @@ for(var i=0;i<opentabs.length;i++){
             else if(taburl.includes("http://")){
                taburl=taburl.slice(7,28);
             }
-         txt+="<br><div class='current'>"+"<p title='"+opentabs[i].url+"' id='name'>"+taburl.slice(0,30)+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
+         txt+="<br><div class='current'>"+"<p title='"+tab[i].url+"' id='name'>"+taburl.slice(0,30)+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
          opent.innerHTML=txt;
       }      
    }
@@ -62,7 +61,16 @@ for(var i=0;i<opentabs.length;i++){
             }
    labels.push(taburl);
 }
-
+for(var i=0;i<closetabs.length;i++){
+   var taburl=closetabs[i].url;
+            if(taburl.includes("https://")){
+               taburl=taburl.slice(8,28);
+            }
+            else if(taburl.includes("http://")){
+               taburl=taburl.slice(7,28);
+            }
+   labels.push(taburl);
+}
 
 
 console.log("labels",opentabs);
@@ -77,6 +85,15 @@ for(var i=0;i<opentabs.length;i++){
          value.push(sec);
       }
    }  
+}
+for(var i=0;i<closetabs.length;i++){
+   for(var j=0;j<activetime.length;j++){
+      if(activetime[j].id===closetabs[i].id){
+         sec=activetime[j].seconds+60*activetime[j].minutes+60*60*activetime[j].hours;
+         time.push({sec:sec,id:activetime[j].id});
+         value.push(sec);
+      }
+   } 
 }
 var totaltime=0
 for(var i=0;i<activetime.length;i++){

@@ -108,6 +108,9 @@ def index(request):
                     # print("activetime:",activetime[j])
                     thisweekhour+=activetime[j]['hours']
                     thisweekminutes+=activetime[j]['minutes']
+                    if(thisweekminutes>60):
+                      thisweekhour+=int(thisweekminutes/60)
+                      thisweekminutes=0
                 
             if(getDuration(opent[i]['opentime'])['days']>=8 and getDuration(opent[i]['opentime'])['days']<15):
                 # print("LastWeek",getDuration(opent[i]['opentime'])['hours'])

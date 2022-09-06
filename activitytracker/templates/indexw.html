@@ -21,7 +21,7 @@
         <div class="right">
             <button id="limit"><a href="#" >Set&nbsp;Limits</a></button>
             <button><a href="{% url 'logout' %}">Logout</a></button>
-            <p id="user">{%if user.is_authenticated%}
+            <p id="user" title="{{user.username}}">{%if user.is_authenticated%}
                 {{user.username|make_list|first}}
              {%endif%}</p>
         </div>

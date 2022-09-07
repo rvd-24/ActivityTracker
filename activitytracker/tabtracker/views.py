@@ -25,6 +25,8 @@ def update_tabs(request):
             opentabs=t['opentabs']
             close=t['closetabs']
             active=t['activetime']
+            active=active[1:]
+            print(active)
             x={}
             senddata+=str(opentabs)+";"+str(close)+";"+str(active)+";"
             if request.user.is_authenticated:
@@ -33,43 +35,38 @@ def update_tabs(request):
                     print("Updated stored details")
                     stuff=trackdetails.objects.get(email=request.user.email)
                     stuff.opentabs=eval(stuff.opentabs)
-                    print("Stuff.opentabs",stuff.opentabs)
-                    print("OPent",opentabs)
-                    # stuff.opentabs.append(str(opentabs))
-                    # stuff.closetabs=eval(stuff.closetabs)
-                    # stuff.closetabs.append(str(stuff.closetabs))
-                    # stuff.activetime=eval(stuff.activetime)
-                    # stuff.activetime.append(str(stuff.activetime))
-                    # for i in stuff.opentabs:
-                    # for i in opentabs:
-                    #     stuff.opentabs.append(i)
-                    # for j in stuff.opentabs:
-                    #     for i in opentabs:
-                    #         if(i['id']==j['id'] and i['url']!=j['url']):
-                    #             print("Same id",i)
-                    #         elif (i['id'] not in j):
-                    #                 print("DifferentID",i)
+                    stuff.closetabs=eval(stuff.closetabs)
+                    stuff.activetime=eval(stuff.activetime)
 
-                    lst=[x for x in opentabs if x not in stuff.opentabs]
-                    print("lst",lst)
-                    for i in lst:
+                    openlst=[x for x in opentabs if x not in stuff.opentabs]
+                    closelst=[x for x in close if x not in stuff.closetabs]
+                    # activelst=[x for x in active if x['id'] not in stuff.activetime[x].values()]
+                    
+                    
+
+                    print("Updated list",openlst)
+                    for i in openlst:
                         stuff.opentabs.append(i)
-                    # print(stuff.opentabs)
-                    # stuff.opentabs=str(stuff.opentabs)                    
-                    # stuff.opentabs=str(opentabs)
+                    
+                    for j in closelst:
+                        stuff.closetabs.append(j)
+                    # for k in activelst:
+                    #     stuff.activetime.append(k)
+
+                    
                     stuff.opentabs=str(stuff.opentabs)
-                    stuff.closetabs=str(close)
+                    stuff.closetabs=str(stuff.closetabs)
                     stuff.activetime=str(active)
                     stuff.email=request.user.email
-                    # stuff=trackdetails(opentabs=str(Open),closetabs=str(close),activetime=str(active),email=request.user.email)
+                    
                     stuff.save()
-                    print(request.user.username)
+                    print("username:",request.user.username)
                 else:
                     print("Saved stuff")
                     stuff=trackdetails(opentabs=str(opentabs),closetabs=str(close),activetime=str(active),email=request.user.email)
                     stuff.save()
-                print(request.user.email)
-                print(request.user)
+                print("email:",request.user.email)
+                # print(request.user)
     if request.user.is_authenticated:
         return HttpResponse(request.user.username)
     else:

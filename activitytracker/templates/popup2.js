@@ -38,13 +38,7 @@ for(var i=0;i<opentabs.length;i++){
                opentabs[i].url=opentabs[i].url.slice(7,28);
             }*/
             var taburl=opentabs[i].url;
-            if(taburl.includes("https://")){
-               taburl=taburl.slice(8,28);
-            }
-            else if(taburl.includes("http://")){
-               taburl=taburl.slice(7,28);
-            }
-         txt+="<br><div class='current'>"+"<p title='"+tab[i].url+"' id='name'>"+taburl.slice(0,30)+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
+         txt+="<br><div class='current'>"+"<p title='"+opentabs[i].fullurl+"' id='name'>"+taburl+"</p>"+"<p id='time'>"+activetime[j].hours+"h&nbsp;"+activetime[j].minutes+"m&nbsp;"+activetime[j].seconds+"s</p>"+"</div>";
          opent.innerHTML=txt;
       }      
    }
@@ -52,24 +46,10 @@ for(var i=0;i<opentabs.length;i++){
 
 const labels = [];
 for(var i=0;i<opentabs.length;i++){
-   var taburl=opentabs[i].url;
-            if(taburl.includes("https://")){
-               taburl=taburl.slice(8,28);
-            }
-            else if(taburl.includes("http://")){
-               taburl=taburl.slice(7,28);
-            }
-   labels.push(taburl);
+   labels.push(opentabs[i].url);
 }
 for(var i=0;i<closetabs.length;i++){
-   var taburl=closetabs[i].url;
-            if(taburl.includes("https://")){
-               taburl=taburl.slice(8,28);
-            }
-            else if(taburl.includes("http://")){
-               taburl=taburl.slice(7,28);
-            }
-   labels.push(taburl);
+   labels.push(closetabs[i].url);
 }
 
 

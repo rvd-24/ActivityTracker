@@ -38,11 +38,13 @@ var tabdata={
     "opentabs":[{
         "id":"",
         "url":"",
-        "opentime":""
+        "opentime":"",
+        "fullurl":""
     }],
     "closetabs":[{
         "id":"",
         "url":"",
+        "fullurl":"",
         "closetime":"",
         "totaltime":""
     }],
@@ -58,29 +60,37 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
     let timerRef = document.querySelector('.timerDisplay');
     let int = null;
-
-    
     tabdata.opentabs.pop();
     tabdata.closetabs.pop();
     for(i=0;i<tabs.length;i++){
         if(tabs[i].url!='chrome://newtab/'&&tabs[i].url.includes("file://")===false){
-                tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
+            var u=new URL(tabs[i].url);
+                tabdata.opentabs.push({id:tabs[i].id,url:u.hostname,opentime:new Date(),fullurl:u.href});
             }
     }
     console.log(tabdata.opentabs);
     chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
         tabexists=false;
+        console.log(tabId);
         for(var i=0;i<tabdata.opentabs.length;i++){
-            if(tabdata.opentabs[i].id===tab.id && tabdata.opentabs[i].url===tab.url){
+            if(tabdata.opentabs[i].id===tab.tabId && tabdata.opentabs[i].url===tab.url){
                 tabexists=true;
             }
         }
         if(tabexists===false){
             var d=new Date();
             if(tab.url!='chrome://newtab/'&&tab.url.includes("file://")===false){
-                tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
+                var u=new URL(tab.url)
+                console.log(u.hostname);
+                tabdata.opentabs.push({id:tab.id,url:u.hostname,opentime:d,fullurl:u.href});
             }
         }
+        console.log(tabdata.opentabs);
+        tabdata.opentabs = tabdata.opentabs.filter((value, index, self) =>
+            index === self.findIndex((t) => (
+                t.id === value.id && t.url === value.url
+            ))
+        )
         console.log(tabdata.opentabs);
     });
     
@@ -90,7 +100,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
             if(tabdata.opentabs[i].id===tab){
                 var closedate=new Date();
                 var totaltime=(closedate-tabdata.opentabs[i].opentime)/1000;
-                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date(),totaltime:totaltime})
+                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date(),totaltime:totaltime,fullurl:tabdata.opentabs[i].fullurl})
                 tabexists=true;
             }
         } 

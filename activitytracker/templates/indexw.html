@@ -84,15 +84,15 @@
                     </div>
                 </div>
                 <div class="list" id="list1">
-                    {%for url in mostused%}
+                    {%for url in mostusedtoday%}
                     <hr>
-                    <div class="p"><p>{{url.url}}&nbsp;<b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
+                    <div class="p"><p title={{url.fullurl}}>{{url.url}}&nbsp;</p><p><b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
                     {% endfor %}
                 </div>
                 <div class="list" id="list2">
-                    {%for url in mostused%}
+                    {%for url in mostusedthisweek%}
                     <hr>
-                    <div class="p"><p>{{url.url}}&nbsp;<b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
+                    <div class="p"><p title={{url.fullurl}}>{{url.url}}&nbsp;</p><p><b>{{url.hours}}h&nbsp;{{url.minutes}}m</b></p></div>
                     {% endfor %}
                 </div>
             </div>

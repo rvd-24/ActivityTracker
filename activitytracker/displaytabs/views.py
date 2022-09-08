@@ -4,46 +4,6 @@ from django.shortcuts import render
 from tabtracker.models import trackdetails
 from datetime import datetime
 
-def getDuration(then, now = datetime.now(), interval = "default"):
-
-    duration = now - then
-    duration_in_s = duration.total_seconds() 
-    
-    def years():
-      return divmod(duration_in_s, 31536000)
-
-    def days(seconds = None):
-      return divmod(seconds if seconds != None else duration_in_s, 86400)
-
-    def hours(seconds = None):
-      return divmod(seconds if seconds != None else duration_in_s, 3600)
-
-    def minutes(seconds = None):
-      return divmod(seconds if seconds != None else duration_in_s, 60)
-
-    def seconds(seconds = None):
-      if seconds != None:
-        return divmod(seconds, 1)   
-      return duration_in_s
-
-    def totalDuration():
-        y = years()
-        d = days(y[1]) 
-        h = hours(d[1])
-        m = minutes(h[1])
-        s = seconds(m[1])
-
-        return "Time between dates: {} years, {} days, {} hours, {} minutes and {} seconds".format(int(y[0]), int(d[0]), int(h[0]), int(m[0]), int(s[0]))
-
-    return {
-        'years': int(years()[0]),
-        'days': int(days()[0]),
-        'hours': int(hours()[0]),
-        'minutes': int(minutes()[0]),
-        'seconds': int(seconds()),
-        'default': totalDuration()
-    }
-
 def gettime(sec):
   sec=sec%(24*3600)
   hour=sec//3600
@@ -51,6 +11,8 @@ def gettime(sec):
   minutes=sec//60
   sec%=60
   return hour,minutes,sec
+
+
 def index(request):
     if request.user.is_authenticated and trackdetails.objects.filter(email=request.user.email).exists():
       tabdetails=trackdetails.objects.get(email=request.user.email)
@@ -84,13 +46,14 @@ def index(request):
           todayhour+=d['hours']
       opent=[]
       yesterday=[]
+      print("OPENTSBD",opentabs)
       for i in opentabs:
           s = i['opentime']
           f = "%Y-%m-%dT%H:%M:%S.%fZ"
           # diff=s-datetime.now()
           # yesterday.append(diff)
           out = datetime.strptime(s, f)
-          ds={"opentime":out,"id":i['id'],"url":i['url']}
+          ds={"opentime":out,"id":i['id'],"url":i['url'],"fullurl":i['fullurl']}
           opent.append(ds)
       # print("OPENTIME")
       senddata={}
@@ -137,19 +100,25 @@ def index(request):
       mostused.reverse()
       for i in range(len(opentabs)):
         for j in range(len(mostused)):
-          if(mostused[j]['id']==opentabs[i]['id']):
-            mostused[j]['url']=opentabs[i]['url']
-            mostused[j]['url']=mostused[j]['url'][:30]
-            if(mostused[j]['url'][:7]=="http://"):
-              mostused[j]['url']=mostused[j]['url'][7:30]
-            elif(mostused[j]['url'][:8]=="https://"):
-              mostused[j]['url']=mostused[j]['url'][8:30]
-      finalmostused=[]
-      # print("MostUsed:",mostused)
-      for d in range(len(mostused)):
-        if "url" in mostused[d]:
-          finalmostused.append(mostused[d])
-      finalmostused=finalmostused[:5]
+          if(mostused[j]['id']==opent[i]['id']):
+            mostused[j]['url']=opent[i]['url']
+            mostused[j]['opentime']=opent[i]['opentime']
+            mostused[j]['fullurl']=opent[i]['fullurl']
+      finalmostusedtoday=[]
+      finalmostusedthisweek=[]
+      
+      for i in mostused:
+        if ((datetime.now()-i['opentime']).days<=1):
+          finalmostusedtoday.append(i)
+        
+      for i in mostused:
+        if ((datetime.now()-i['opentime']).days<=7):
+          finalmostusedthisweek.append(i)
+
+      finalmostusedtoday=finalmostusedtoday[:5]
+      finalmostusedthisweek=finalmostusedthisweek[:5]
+
+
       senddata['opentabs']=opentabs
       senddata['closedtabs']=closedtabs
       senddata['activetime']=activetime
@@ -176,36 +145,8 @@ def index(request):
       # print(senddata)
       # print(datetime.now())
       Tabdetails=[opentabs,closedtabs,activetime]
-      return render(request,'indexw.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostused':finalmostused})
+      return render(request,'indexw.html',{'opentabs':opentabs,'closedtabs':closedtabs,'activetime':activetime,'urls':urls,'senddata':senddata,'mostusedtoday':finalmostusedtoday,'mostusedthisweek':finalmostusedthisweek})
     else:
         return render(request,'indexw.html')
 
-
-
-#Trash Code
-# for i in range(len(opent)):
-      #     # print(getDuration(opent[i]['opentime'])['days'])
-      #     if(getDuration(opent[i]['opentime'])['days']>0 and getDuration(opent[i]['opentime'])['days']<=1):
-      #         yesterdayhour+=getDuration(opent[i]['opentime'])['hours']
-      #         yesterdayminutes+=getDuration(opent[i]['opentime'])['minutes']
-      #         yesterdaysec+=getDuration(opent[i]['opentime'])['seconds']
-
-      #     if(getDuration(opent[i]['opentime'])['days']<=7):
-      #         # print("This Week Details")
-      #         # print(thisweekhour,opent[i]['opentime'],getDuration(opent[i]['opentime']))
-      #         for j in range(0,len(activetime)):
-      #           # print("ACT",activetime[j]['id'])
-      #           # print("OPENT",opent[i]['id'])
-      #           if(activetime[j]['id']==opent[i]['id']):
-      #             # print("activetime:",activetime[j])
-      #             thisweekhour+=activetime[j]['hours']
-      #             thisweekminutes+=activetime[j]['minutes']
-      #             if(thisweekminutes>60):
-      #               thisweekhour+=int(thisweekminutes/60)
-      #               thisweekminutes=0
-              
-      #     if(getDuration(opent[i]['opentime'])['days']>=8 and getDuration(opent[i]['opentime'])['days']<15):
-      #         # print("LastWeek",getDuration(opent[i]['opentime'])['hours'])
-      #         lastweekhour+=getDuration(opent[i]['opentime'])['hours']
-      #         lastweekminutes+=getDuration(opent[i]['opentime'])['minutes']
       

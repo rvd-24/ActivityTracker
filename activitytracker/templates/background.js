@@ -230,6 +230,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                 dataType:"text",
                 success: function(recvmsg) {
                     tabdata.user_authenticated=recvmsg;
+                    console.log(recvmsg);
                     console.log("Receiving ajax request");
                 }
             })

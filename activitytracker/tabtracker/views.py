@@ -25,6 +25,9 @@ def update_tabs(request):
             opentabs=t['opentabs']
             close=t['closetabs']
             active=t['activetime']
+            chkactive=[]
+            for i in active:
+                chkactive.append(i['id'])
             active=active[1:]
             print(active)
             x={}
@@ -38,12 +41,36 @@ def update_tabs(request):
                     stuff.closetabs=eval(stuff.closetabs)
                     stuff.activetime=eval(stuff.activetime)
 
+                    stuffchk=[]
+
+                    for i in stuff.activetime:
+                        stuffchk.append(i['id'])
+
                     openlst=[x for x in opentabs if x not in stuff.opentabs]
                     closelst=[x for x in close if x not in stuff.closetabs]
-                    # activelst=[x for x in active if x['id'] not in stuff.activetime[x].values()]
+                    activelst=[x for x in chkactive if x not in stuffchk]
+                    print("Updated active time",activelst)
                     
-                    
+                    # for i in opentabs:
+                    #     print(i)
+                    # for j in active :
+                    #     print(j)
+                    # for i in opentabs:
+                    #     for j in active:
+                    #         if(i['id'] not in j.values()):
+                    #             print(i['id'],j['id'])
 
+                    for i in activelst:
+                        for j in active:
+                            if(j['id']==i):
+                                stuff.activetime.append(j)
+                    
+                    for i in stuff.activetime:
+                        for j in active:
+                            if(i['id']==j['id']):
+                                i.update(j)
+                    for i in stuff.activetime:
+                        print(i)
                     print("Updated list",openlst)
                     for i in openlst:
                         stuff.opentabs.append(i)
@@ -56,7 +83,7 @@ def update_tabs(request):
                     
                     stuff.opentabs=str(stuff.opentabs)
                     stuff.closetabs=str(stuff.closetabs)
-                    stuff.activetime=str(active)
+                    stuff.activetime=str(stuff.activetime)
                     stuff.email=request.user.email
                     
                     stuff.save()

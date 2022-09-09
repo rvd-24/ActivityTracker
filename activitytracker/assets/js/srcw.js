@@ -1,119 +1,27 @@
-setInterval(function submithandler(){
-    console.log("Receiving ajax request");
-    /*$.get("http://127.0.0.1:8000/sendchartdata/", function(data, status){
-        console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
-      });*/
-    $.ajax({
-        type:"GET",
-        url:"http://127.0.0.1:8000/sendchartdata/",
-        dataType:"json",
-        success: function(recvmsg) {
-            var chart;
-            var data;
-            console.log(recvmsg);
-            google.charts.load('current',{
-                callback:drawChart,
-                packages:['corechart']
-            });
-            function drawChart(){
-                var tabdata=recvmsg;
-                data=new google.visualization.DataTable();
-                data.addColumn('string','URL');
-                data.addColumn('number','seconds');
-                data.addColumn('number','minutes');
-                for(var i=1;i<tabdata.activetime.length;i++){
-                    for(var j=0;j<tabdata.opentabs.length;j++){
-                        if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
-                            data.addRow([
-                                tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
-                            ]);
-                        }
-                    }
-                    
-                }
-                var options = {
-                    title: 'Pie Chart',
-                    width: 600,
-                    colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
-                    is3D: true,
-                    height: 600,
-                    responsive:true
-                };
-
-                chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-                google.visualization.events.addListener(chart, 'select', selectHandler);
-                chart.draw(data, options);
-                }
-                google.charts.setOnLoadCallback(drawChart1);
-                function drawChart1() {
-                    var tabdata=recvmsg;
-                    data=new google.visualization.DataTable();
-                    data.addColumn('string','URL');
-                    data.addColumn('number','seconds');
-                    data.addColumn('number','minutes');
-                    for(var i=1;i<tabdata.activetime.length;i++){
-                        for(var j=0;j<tabdata.opentabs.length;j++){
-                            if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
-                                data.addRow([
-                                    tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
-                                ]);
-                            }
-                        }
-                        
-                }
-
-                    var options = {
-                        colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
-                        is3D: true,
-                        title: 'Pie Chart',
-                        width: 600,
-                        height: 600,
-                        responsive:true
-                    };
-
-                    var chart = new google.visualization.PieChart(document.getElementById('piechart1_3d'));
-                    chart.draw(data, options);
-                }
-                function selectHandler() {
-                // be sure something is selected
-                if (chart.getSelection().length) {
-                    var selectedItem = chart.getSelection()[0];
-                    var value = data.getValue(selectedItem.row, 0);
-                    alert('The user selected ' + value);
-                }
-                }
-                window.onresize=function(){
-                    drawChart();
-                    drawChart1();
-                };
-            },
-        error: function(){
-            console.log("json not found");
-        }
-    })
-},3000);
-
+console.log("SRCW@");
 var s1=document.getElementById("val1").innerHTML;
 var s2=document.getElementById("val2").innerHTML;
+console.log(s1[0])
+console.log(s2[0])
 if(s1[0]==="+"){
     document.getElementById("val1").style.color="#5ECA2C";
-    document.getElementById("g1").src="increase.png"
+    document.getElementById("g1").src="static/images/inc.png"
 }
 else{
     document.getElementById("val1").style.color="#F95050";
-    document.getElementById("g1").src="decrease.png"
+    document.getElementById("g1").src="static/images/dec.png"
 }
 if(s2[0]==="+"){
     document.getElementById("val2").style.color="#5ECA2C";
-    document.getElementById("g2").src="increase.png"
+    document.getElementById("g2").src="static/images/inc.png"
 }
 else{
     document.getElementById("val2").style.color="#F95050";
-    document.getElementById("g2").src="decrease.png"
+    document.getElementById("g2").src="static/images/dec.png"
 }
 
 
-var myEl = document.getElementById('drop1');
+const myEl = document.getElementById('drop1');
 myEl.addEventListener('click', function () {
     if (document.getElementById("drop1ele").style.display==="block"){
         document.getElementById("drop1ele").style.display="none";
@@ -169,44 +77,108 @@ function change1(){
         document.getElementById("list2").style.display="none";
     }
 }
-/*google.charts.load("current", {packages:["corechart"]});
-google.charts.setOnLoadCallback(drawChart);
-function drawChart() {
-    var data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['vtop.com',5],
-        ['youtube.com',4],
-        ['netflix.com',3],
-        ['Others',2]
-    ]);
 
-    var options = {
-        colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
-        is3D: true,
-    };
 
-    var chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
-    chart.draw(data, options);
-}
-google.charts.setOnLoadCallback(drawChart1);
-function drawChart1() {
-    var data = google.visualization.arrayToDataTable([
-        ['Task', 'Hours per Day'],
-        ['vtop.com',18],
-        ['youtube.com',16],
-        ['netflix.com',13],
-        ['Others',10]
-    ]);
+setInterval(function submithandler(){
+    console.log("Receiving ajax request");
+    /*$.get("http://127.0.0.1:8000/sendchartdata/", function(data, status){
+        console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+      });*/
+    $.ajax({
+        type:"GET",
+        url:"http://127.0.0.1:8000/sendchartdata/",
+        dataType:"json",
+        success: function(recvmsg) {
+            var chart;
+            var data;
+            console.log(recvmsg);
+            google.charts.load('current',{
+                callback:drawChart,
+                packages:['corechart']
+            });
+            function drawChart(){
+                var tabdata=recvmsg;
+                data=new google.visualization.DataTable();
+                var date=new Date();
+                data.addColumn('string','URL');
+                data.addColumn('number','seconds');
+                data.addColumn('number','minutes');
+                for(var i=1;i<tabdata.activetime.length;i++){
+                    for(var j=0;j<tabdata.opentabs.length;j++){
+                        const Time = Math.abs(date - new Date(tabdata.opentabs[j].opentime));
+                        const Days = Math.ceil(Time / (1000 * 60 * 60 * 24));
+                        console.log("Today",Days);
+                        if(Days<=1){
+                            if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
+                                data.addRow([
+                                    tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
+                                ]);
+                            }
+                            }
+                        }  
+                }
+                var options = {
+                    title: 'Pie Chart: Details for Today',
+                    width: 600,
+                    // colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
+                    is3D: true,
+                    height: 600,
+                    responsive:true
+                };
 
-    var options = {
-        colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
-        is3D: true,
-    };
+                chart = new google.visualization.PieChart(document.getElementById('piechart_3d'));
+                google.visualization.events.addListener(chart, 'select', selectHandler);
+                chart.draw(data, options);
+                }
+                google.charts.setOnLoadCallback(drawChart1);
+                function drawChart1() {
+                    var tabdata=recvmsg;
+                    data=new google.visualization.DataTable();
+                    data.addColumn('string','URL');
+                    data.addColumn('number','seconds');
+                    data.addColumn('number','minutes');
+                    var date=new Date();
+                    for(var i=1;i<tabdata.activetime.length;i++){
+                        for(var j=0;j<tabdata.opentabs.length;j++){
+                            const Time = date - new Date(tabdata.opentabs[j].opentime);
+                            const Days = Math.ceil(Time / (1000 * 60 * 60 * 24));
+                            if(Days<7){
+                                if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
+                                    data.addRow([
+                                        tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
+                                    ]);
+                                }
+                            }
+                        }
+                        
+                }
+                    var options = {
+                        // colors: ['#65CA78', '#DE6262', '#5BC4FA', '#F6C06D'],
+                        is3D: true,
+                        title: 'Pie Chart: This Week Details',
+                        width: 600,
+                        height: 600,
+                        responsive:true
+                    };
 
-    var chart = new google.visualization.PieChart(document.getElementById('piechart1_3d'));
-    chart.draw(data, options);
-}
-window.onresize=function(){
-    drawChart();
-    drawChart1();
-};*/
+                    var chart = new google.visualization.PieChart(document.getElementById('piechart1_3d'));
+                    chart.draw(data, options);
+                }
+                function selectHandler() {
+                // be sure something is selected
+                if (chart.getSelection().length) {
+                    var selectedItem = chart.getSelection()[0];
+                    var value = data.getValue(selectedItem.row, 0);
+                    alert('The user selected ' + value);
+                }
+                }
+                window.onresize=function(){
+                    drawChart();
+                    drawChart1();
+                };
+            },
+        error: function(){
+            console.log("json not found");
+        }
+    })
+},3000);

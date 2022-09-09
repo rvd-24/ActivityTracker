@@ -19,7 +19,7 @@
             <p>Activity Tracker</p>
         </div>
         <div class="right">
-            <button id="limit"><a href="#" >Set&nbsp;Limits</a></button>
+            <button id="limit"><a href="{% url 'alarms' %}" >Set&nbsp;Limits</a></button>
             <button><a href="{% url 'logout' %}">Logout</a></button>
             <p id="user" title="{{user.username}}">{%if user.is_authenticated%}
                 {{user.username|make_list|first}}
@@ -33,13 +33,13 @@
                     <h4>Today</h4>
                     <h3>{{senddata.todayhour}}h&nbsp;&nbsp;{{senddata.todayminutes}}m</h3>
                     <div class="past">
-                        <h4 id="val1">+10%</h4>
+                        <h4 id="val1">{{senddata.change24hrs}}%</h4>
                         <p>yesterday</p>
                         <h5>{{senddata.yesterdayhour}}h&nbsp;{{senddata.yesterdayminutes}}m</h5>
                     </div>
                 </div>
                 <div class="line">
-                    <img id="g1" src="{% static 'images/inc.png'%}" alt="increase">
+                    <img id="g1" src="{% static 'images/inc.png'%}">
                 </div>
             </div>
             <div class="box">
@@ -47,13 +47,13 @@
                     <h4>This week</h4>
                     <h3>{{senddata.thisweekhour}}h&nbsp;{{senddata.thisweekminutes}}m</h3>
                     <div class="past">
-                        <h4 id="val2">-17%</h4>
+                        <h4 id="val2">{{senddata.changeweek}}%</h4>
                         <p>last week</p>
                         <h5>{{senddata.lastweekhour}}h&nbsp;{{senddata.lastweekminutes}}m</h5>
                     </div>
                 </div>
                 <div class="line">
-                    <img id="g2" src="{% static 'images/dec.png'%}" alt="decrease">
+                    <img id="g2" src="{% static 'images/dec.png'%}">
                 </div>
             </div>
         </div>

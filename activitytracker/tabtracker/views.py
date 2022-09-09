@@ -29,7 +29,7 @@ def update_tabs(request):
             for i in active:
                 chkactive.append(i['id'])
             active=active[1:]
-            print(active)
+            # print(active)
             x={}
             senddata+=str(opentabs)+";"+str(close)+";"+str(active)+";"
             if request.user.is_authenticated:
@@ -69,9 +69,8 @@ def update_tabs(request):
                         for j in active:
                             if(i['id']==j['id']):
                                 i.update(j)
-                    for i in stuff.activetime:
-                        print(i)
-                    print("Updated list",openlst)
+                    
+                    # print("Updated list",openlst)
                     for i in openlst:
                         stuff.opentabs.append(i)
                     
@@ -93,7 +92,7 @@ def update_tabs(request):
                     stuff=trackdetails(opentabs=str(opentabs),closetabs=str(close),activetime=str(active),email=request.user.email)
                     stuff.save()
                 print("email:",request.user.email)
-                # print(request.user)
+                
     if request.user.is_authenticated:
         return HttpResponse(request.user.username)
     else:
@@ -110,13 +109,12 @@ def sendchartdata(request):
             todayminutes=0
             todayhour=0
             todaysec=0
-            # print(activetime)
+            
             for d in activetime:
                 todayminutes+=d['minutes']
                 todaysec+=d['seconds']
                 todayhour+=d['hours'] 
-                # for key in d.keys(): 
-                #     print("Key: {}, value: {}".format(key, d[key]))
+                
             senddata={}
             senddata['opentabs']=opentabs
             senddata['closedtabs']=closedtabs
@@ -128,4 +126,7 @@ def sendchartdata(request):
             return HttpResponse(json.dumps(senddata), content_type="application/json")
     else:
         return HttpResponse('indexw.html')
+
+def setalarms(request):
+  return render(request,'alarmindex.html')
 

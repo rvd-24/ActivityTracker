@@ -1,0 +1,30 @@
+{% load static %}
+{% static "images" as baseUrl %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Tracker Time Setter</title>
+    <link rel="stylesheet" href="{% static 'styles/alarmstyle.css'%}">
+</head>
+<body>
+    <h1>Set alarms for your websites</h1>
+    <button>Go Back</button>
+    <form>
+        <input type="text" >
+        <input type="number" value="1" min="0" max="24"><p>h</p>
+        <input type="number" min="0" max="60"value="0"><p>m</p>
+        <button><a href="">set</a></button>
+    </form>
+    <div class="list">
+        <p>&nbsp;</p><hr>
+        <p>&nbsp;</p><hr>
+        <p>&nbsp;</p><hr>
+        <p>&nbsp;</p><hr>
+        <p>&nbsp;</p><hr>
+    </div>
+</body>
+</html>

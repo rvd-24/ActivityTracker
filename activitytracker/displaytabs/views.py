@@ -3,8 +3,15 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from tabtracker.models import trackdetails
 from datetime import datetime
+import pytz
+from django.utils import timezone
 
 
+def convert_to_localtime(utctime):
+  fmt = "%Y-%m-%dT%H:%M:%S.%fZ"
+  utc = utctime.replace(tzinfo=pytz.UTC)
+  localtz = utc.astimezone(timezone.get_current_timezone())
+  return localtz.strftime(fmt)
 
 def gettime(sec):
   sec=sec%(24*3600)
@@ -44,12 +51,11 @@ def index(request):
     for i in opentabs:
         s = i['opentime']
         f = "%Y-%m-%dT%H:%M:%S.%fZ"
-        # diff=s-datetime.now()
-        # yesterday.append(diff)
+        
         out = datetime.strptime(s, f)
         ds={"opentime":out,"id":i['id'],"url":i['url'],"fullurl":i['fullurl']}
         opent.append(ds)
-
+    
     senddata={}
     todaytime=0
     yesterdaytime=0
@@ -60,6 +66,9 @@ def index(request):
       if((datetime.now()-i['opentime']).days>=1 and (datetime.now()-i['opentime']).days<2):
         for j in activetime:
           if(i['id'] in j.values()):
+            print("Yesterday",i)
+            print(j)
+            print("\n")
             yesterdaytime+=j['seconds']+j['minutes']*60+j['hours']*60*60
       
       if((datetime.now()-i['opentime']).days<1):
@@ -81,6 +90,7 @@ def index(request):
 
       # print("DaysDiff",(datetime.now()-i['opentime']).days,i['opentime'])
     
+   
     todayhour,todayminutes,todaysec=gettime(todaytime)
     yesterdayhour,yesterdayminutes,yesterdaysec=gettime(yesterdaytime)
     thisweekhour,thisweekminutes,thisweeksec=gettime(thisweektime)
@@ -109,7 +119,7 @@ def index(request):
         mostused.remove(i);
     
     for i in mostused:
-      if((datetime.now()-i['opentime']).days<=1):
+      if((datetime.now()-i['opentime']).days<1):
         finalmostusedtoday.append(i)
       
     for i in mostused:
@@ -126,6 +136,7 @@ def index(request):
     print("Today",todayhour,todayminutes)
     print(todaytime)
     print(thisweektime)
+
     senddata['opentabs']=opentabs
     senddata['closedtabs']=closedtabs
     senddata['activetime']=activetime
@@ -158,7 +169,7 @@ def index(request):
     if(int(change24hrs)>0):
       change24hrs="+"+str(int(change24hrs))
     else:
-      change24hrs="-"+str(int(change24hrs)) 
+      change24hrs="-"+str(abs(int(change24hrs))) 
     
     senddata['change24hrs']=change24hrs
     
@@ -170,7 +181,7 @@ def index(request):
     if(int(changeweek)>0):
       changeweek="+"+str(int(changeweek))
     else:
-      changeweek="-"+str(int(changeweek)) 
+      changeweek="-"+str(abs(int(changeweek))) 
     
     senddata['changeweek']=changeweek
 

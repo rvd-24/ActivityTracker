@@ -100,9 +100,8 @@ setInterval(function submithandler(){
                 var tabdata=recvmsg;
                 data=new google.visualization.DataTable();
                 var date=new Date();
-                data.addColumn('string','URL');
+                data.addColumn('string','url');
                 data.addColumn('number','seconds');
-                data.addColumn('number','minutes');
                 for(var i=1;i<tabdata.activetime.length;i++){
                     for(var j=0;j<tabdata.opentabs.length;j++){
                         const Time = Math.abs(date - new Date(tabdata.opentabs[j].opentime));
@@ -110,8 +109,11 @@ setInterval(function submithandler(){
                         console.log("Today",Days);
                         if(Days<=1){
                             if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
+                                console.log(tabdata.activetime[i]);
+                                var totaltime=parseInt(tabdata.activetime[i].minutes)*60+parseInt(tabdata.activetime[i].hours)*60*60+parseInt(tabdata.activetime[i].seconds);
+                                // console.log(totaltime);
                                 data.addRow([
-                                    tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
+                                    tabdata.opentabs[j].url,parseInt(totaltime)
                                 ]);
                             }
                             }
@@ -136,16 +138,17 @@ setInterval(function submithandler(){
                     data=new google.visualization.DataTable();
                     data.addColumn('string','URL');
                     data.addColumn('number','seconds');
-                    data.addColumn('number','minutes');
                     var date=new Date();
                     for(var i=1;i<tabdata.activetime.length;i++){
                         for(var j=0;j<tabdata.opentabs.length;j++){
                             const Time = date - new Date(tabdata.opentabs[j].opentime);
                             const Days = Math.ceil(Time / (1000 * 60 * 60 * 24));
-                            if(Days<7){
+                            console.log("THis week",Days);
+                            if(Days<=7){
                                 if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
+                                    var totaltime=parseInt(tabdata.activetime[i].minutes)*60+parseInt(tabdata.activetime[i].hours)*60*60+parseInt(tabdata.activetime[i].seconds);
                                     data.addRow([
-                                        tabdata.opentabs[j].url,parseInt(tabdata.activetime[i].seconds),parseInt(tabdata.activetime[i].minutes)
+                                        tabdata.opentabs[j].url,parseInt(totaltime)
                                     ]);
                                 }
                             }

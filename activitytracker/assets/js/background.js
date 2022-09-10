@@ -64,7 +64,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     tabdata.closetabs.pop();
     for(i=0;i<tabs.length;i++){
         console.log(tabs[i].id+tabs[i].url)
-        tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date()});
+        tabdata.opentabs.push({id:tabs[i].id,url:tabs[i].url,opentime:new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' })});
     }
     chrome.tabs.onActivated.addListener(function(tab){
         hour=0
@@ -146,7 +146,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
             }
         }
         if(tabexists===false){
-            var d=new Date();
+            var d=new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
             if(tab.url!='chrome://newtab/'){
                 tabdata.opentabs.push({id:tab.id,url:tab.url,opentime:d});
             }
@@ -159,9 +159,9 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         console.log(tab);
         for(var i=0;i<tabdata.opentabs.length;i++){
             if(tabdata.opentabs[i].id===tab){
-                var closedate=new Date();
+                var closedate=new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
                 var totaltime=(closedate-tabdata.opentabs[i].opentime)/1000;
-                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date(),totaltime:totaltime})
+                tabdata.closetabs.push({id:tab,url:tabdata.opentabs[i].url,closetime:new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }),totaltime:totaltime})
                 tabexists=true;
             }
         } 

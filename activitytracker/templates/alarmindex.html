@@ -12,12 +12,13 @@
 </head>
 <body>
     <h1>Set alarms for your websites</h1>
-    <button>Go Back</button>
-    <form>
-        <input type="text" >
-        <input type="number" value="1" min="0" max="24"><p>h</p>
-        <input type="number" min="0" max="60"value="0"><p>m</p>
-        <button><a href="">set</a></button>
+    <a href="{% url 'home' %}"><button>Go Back</button></a>
+    <form action="" method="POST">
+        {%csrf_token%}
+        <input type="text" name="url">
+        <input type="number" value="1" name="hour" min="0" max="24"><p>h</p>
+        <input type="number" min="0" name="minute" max="60"value="0"><p>m</p>
+        <button type="submit" onclick="redirect()">set</button>
     </form>
     <div class="list">
         <p>&nbsp;</p><hr>
@@ -26,5 +27,10 @@
         <p>&nbsp;</p><hr>
         <p>&nbsp;</p><hr>
     </div>
+    <script>
+        function redirect(){
+            window.location.href='http://127.0.0.1:8000/set_alarms'
+        }
+    </script>
 </body>
 </html>

@@ -11,3 +11,9 @@ class trackdetails(models.Model):
     closetabs=models.CharField(max_length=60000,null=True,default='')
     activetime=models.CharField(max_length=60000,null=True,default='')
     email=models.EmailField(max_length=85,unique=True)
+
+class alarm(models.Model):
+    url=models.CharField(max_length=60000,null=True,default='')
+    time=models.IntegerField(null=True,default=0)
+    email=models.EmailField(max_length=85,unique=False)
+

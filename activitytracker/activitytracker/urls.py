@@ -22,7 +22,6 @@ urlpatterns = [
     path('',include('displaytabs.urls')),
     path('',include('tabtracker.urls')),
     path('useraccount/',include('useraccount.urls')),
-    path('tabtracker/',include('tabtracker.urls')),
     path('admin/', admin.site.urls)
 ]
 # urlpatterns=urlpatterns+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

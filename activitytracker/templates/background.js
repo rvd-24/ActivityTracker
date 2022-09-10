@@ -54,6 +54,10 @@ var tabdata={
         "minutes":0,
         "seconds":0,
         "millisec":0
+    }],
+    "Alarms":[{
+        "url":"",
+        "time":0
     }]
 } 
 chrome.tabs.query({windowType:'normal'},function(tabs){
@@ -81,7 +85,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
             var d=new Date();
             if(tab.url!='chrome://newtab/'&&tab.url.includes("file://")===false){
                 var u=new URL(tab.url)
-                console.log(u.hostname);
+                // console.log(u.hostname);
                 tabdata.opentabs.push({id:tab.id,url:u.hostname,opentime:d,fullurl:u.href});
             }
         }
@@ -232,6 +236,16 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                     tabdata.user_authenticated=recvmsg;
                     console.log(recvmsg);
                     console.log("Receiving ajax request");
+                }
+            })
+        },5000);
+        setInterval(function submithandler(){
+            $.ajax({
+                type:"GET",
+                url:"http://127.0.0.1:8000/set_alarms",
+                dataType:"json",
+                success: function(recvmsg) {
+                    console.log("Alarmside",recvmsg);
                 }
             })
         },5000);

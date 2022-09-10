@@ -52,7 +52,7 @@ INSTALLED_APPS = [
 ]
 
 TIME_ZONE = 'Asia/Kolkata'
-
+USE_TZ=True
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

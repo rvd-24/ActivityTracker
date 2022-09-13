@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 import pytz
 import re
+from datetime import datetime
 from django.utils import timezone
 
 
@@ -25,7 +26,8 @@ def is_ajax(request):
     return request.META.get('HTTP_X_REQUESTED_WITH') == 'XMLHttpRequest'
 
 from django.views.decorators.csrf import csrf_exempt
-from .models import trackdetails,alarm
+from .models import trackdetails
+from .models import alarmdetail
 
 def user_exists(email):
     return User.objects.filter(email=email).exists()
@@ -153,14 +155,10 @@ def sendchartdata(request):
 
 def set_alarms(request):
     if request.method=='GET':
-        if request.user.is_authenticated  and alarm.objects.filter(email=request.user.email).exists():
-            alarms=alarm.objects.get(email=request.user.email)
-            url=alarms.url
-            time=alarms.time
-            sendalarm={}
-            sendalarm['url']=url
-            sendalarm['time']=time
-            return HttpResponse(json.dumps(sendalarm),content_type="application/json")
+        if request.user.is_authenticated  and alarmdetail.objects.filter(email=request.user.email).exists():
+            alarmstuff=alarmdetail.objects.get(email=request.user.email)
+            alarm=eval(alarmstuff.alarmdet)
+            return HttpResponse(json.dumps(alarm),content_type="application/json")
 
 def setalarms(request):
     print(request.method)
@@ -174,7 +172,8 @@ def setalarms(request):
         opentabs=eval(stuff.opentabs)
         activetime=eval(stuff.activetime)
         closetabs=eval(stuff.closetabs)
-        urlopen=[]
+        alarmdetails=[]
+        
         for i in opentabs:
             for j in closetabs:
                 for k in activetime:
@@ -187,12 +186,43 @@ def setalarms(request):
         #         if(i['id']==j['id']):
         #             print("removed",i,j)
 
-        for i in opentabs:
-            for j in activetime:
-                if(i['id']==j['id']):
-                    print(i['url'])
-                    if url in i['url']:
-                        print("FOUND",url,i['url'])
-                        stuff=alarm(url=url,time=time,email=request.user.email)
-                        stuff.save()
+        if alarmdetail.objects.filter(email=request.user.email).exists():
+            stuff=alarmdetail.objects.get(email=request.user.email)
+            alarm=eval(stuff.alarmdet)
+            for i in opentabs:
+                for j in activetime:
+                    if(i['id']==j['id']):
+                        print(i['url'])
+                        if url in i['url']:
+                            print("FOUND",url,i['url'])
+                            detail={}
+                            now=datetime.now()
+                            datestr=now.strftime("%d/%m/%Y %H:%M:%S")
+                            detail['url']=i['url']
+                            detail['time']=time
+                            detail['settime']=datestr
+                            alarmdetails.append(detail)
+                            print("akla",alarmdetails)
+                            stuff.alarmdet=str(alarmdetails)
+                            stuff.email=request.user.email
+                            stuff.save()
+                            break;
+        else:
+            for i in opentabs:
+                for j in activetime:
+                    if(i['id']==j['id']):
+                        print(i['url'])
+                        if url in i['url']:
+                            print("FOUND",url,i['url'])
+                            detail={}
+                            now=datetime.now()
+                            datestr=now.strftime("%d/%m/%Y %H:%M:%S")
+                            detail['url']=i['url']
+                            detail['time']=time
+                            detail['settime']=datestr
+                            alarmdetails.append(detail)
+                            break;
+                            
+            stuff=alarmdetail(alarmdet=str(alarmdetails),email=request.user.email)
+            stuff.save()
     return render(request,'alarmindex.html')

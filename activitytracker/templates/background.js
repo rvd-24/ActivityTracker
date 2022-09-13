@@ -59,7 +59,8 @@ var tabdata={
         "url":"",
         "time":0
     }]
-} 
+}
+var alarms={}
 chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
     let timerRef = document.querySelector('.timerDisplay');
@@ -198,7 +199,14 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     }
     console.log(tabdata.activetime);
     });
-     
+    chrome.storage.sync.set(tabdata, () => {
+        chrome.storage.sync.get('opentabs', result => {
+          console.log('Opentabs from storage:', result.opentabs);
+        });
+        chrome.storage.sync.get(tabdata, result => {
+            console.log('All values recv from storage', result);
+          });
+        });
     setInterval(function submithandler(){
             console.log("Sending ajax request");
             $.ajax({
@@ -245,12 +253,119 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                 url:"http://127.0.0.1:8000/set_alarms",
                 dataType:"json",
                 success: function(recvmsg) {
+                    console.log(recvmsg);
+                    recvmsg = recvmsg.filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.url === value.url && t.time === value.time
+                        ))
+                    )
+                    tabdata.Alarms.pop();
+                    console.log(recvmsg);
+                    for(var i=0;i<recvmsg.length;i++){
+                        var sec=parseInt(recvmsg[i].time%(24*3600))
+                        sec%= 3600
+                        var mi=sec/60
+                        sec%=60
+                        tabdata.Alarms.push({url:String(recvmsg[i].url),time:mi})
+                    }
+                    tabdata.Alarms = tabdata.Alarms.filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.url === value.url && t.time === value.time
+                        ))
+                    )
                     console.log("Alarmside",recvmsg);
+                    console.log(tabdata)
+                    for(var i=0;i<tabdata.Alarms.length;i++){
+                        chrome.alarms.create(tabdata.Alarms[i].url,{
+                            periodInMinutes:1
+                        })
+                    }
+
+                    
+                    /*chrome.alarms.create('test',{
+                        when:Date.now(),
+                        periodInMinutes:0.5
+                    })*/
+                    alarms=tabdata.Alarms     
+                    console.log(alarms);               
                 }
             })
         },5000);
+       
+        setInterval(()=>{
+            chrome.storage.sync.get(tabdata, result => {
+                console.log('All values recv from storage', result);
+              });
+              chrome.storage.sync.get(tabdata,result =>{
+                for(var i=0;i<result.Alarms.length;i++){
+                    chrome.alarms.create(result.Alarms[i].url,{
+                        when:Date.now(),
+                        periodInMinutes:0.1
+                    })
+                }
+                for(var i=0;i<result.opentabs.length;i++){
+                    for(var j=0;j<result.activetime;j++){
+                        if(res.opentabs[i].id===result.activetime[j].id){
+                        for(var k=0;k<result.Alarms.length;k++){
+                            if(result.Alarms[i].url===result.opentabs[i].url){
+                                console.log(reults.opentabs[i].url,result.opentabs[j])
+                            }
+                        }
+                        }
+                    }
+                }
+                
+                
+            })
+    },2000);
+    /*chrome.storage.onChanged.addListener(function (changes, namespace) {
+        for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+          console.log(
+            `Storage key "${key}" in namespace "${namespace}" changed.`,
+            `Old value was "Object.values(${oldValue})", new value is "${newValue}".`
+          );
+        }
+      });*/
     
+        /*chrome.alarms.create('test',{
+            // when:Date.now(),
+            periodInMinutes:1
+        })
+        chrome.alarms.onAlarm.addListener((alarm)=>{
+            if(alarm.name==='test'){
+                alert()
+            }
+        })*/
+           /*var arrayWithFilterObjects=[]
+            for(var i=0;i<tabdata.Alarms.length;i++){ 
+                arrayWithFilterObjects= tabdata.opentabs.filter((o) => o.url === tabdata.Alarms[i].url);
+                if(!arrayWithFilterObjects.length){
+                    console.log("Tab not active/open");
+                }
+                else{
+                    console.log(arrayWithFilterObjects)
+                }
+            }
+            chrome.alarms.onAlarm.addListener((alarm)=>{    
+                if(alarm.name==="www.youtube.com"){
+                    console.log("Alarm set");
+                    alert(alarm.name+"Alert! You are not a Procrastinator. You seem to be productive at unimportant things.")
+                    chrome.notifications.create('test', {
+                        type: 'basic',
+                        iconUrl: 'back.png',
+                        title: 'Alert! You are not a Procrastinator',
+                        message: 'You seem to be productive at unimportant things.',
+                        priority: 2
+                    });
+        }
+                })*/
+            
 });
+
+
+/*
+ */   
+
 
 chrome.extension.onConnect.addListener(function(port) {
     console.log("Connected .....");

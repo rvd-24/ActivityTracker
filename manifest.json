@@ -13,7 +13,7 @@
     "background":{
         "scripts":["activitytracker/templates/jquery-3.1.0.min.js","activitytracker/templates/background.js"]
     },
-    "permissions":["tabs","serial","https://cdn.jsdelivr.net/npm/chart.js","http://127.0.0.1:8000/","notifications","alarms"],
+    "permissions":["tabs","serial","https://cdn.jsdelivr.net/npm/chart.js","http://127.0.0.1:8000/","notifications","alarms","storage"],
     "browser_action":{
         "default_icon":"activitytracker/templates/icon16.png",
         "default_popup":"activitytracker/templates/popup.html",

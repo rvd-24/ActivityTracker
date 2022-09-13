@@ -119,6 +119,10 @@ def index(request):
         mostused.remove(i);
     
     for i in mostused:
+      if "opentime" not in i:
+        mostused.remove(i)
+
+    for i in mostused:
       if((datetime.now()-i['opentime']).days<1):
         finalmostusedtoday.append(i)
       

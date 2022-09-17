@@ -96,6 +96,8 @@ def index(request):
     yesterdayhour,yesterdayminutes,yesterdaysec=gettime(yesterdaytime)
     thisweekhour,thisweekminutes,thisweeksec=gettime(thisweektime)
     lastweekhour,lastweekminutes,lastweeksec=gettime(lastweektime)
+    thisweeknumdays=thisweektime//(24*3600)
+    lastweeknumdays=lastweektime//(24*3600)
     
     mostused=sorted(activetime, key=lambda d: d['minutes'])
     mostused=mostused[1:]
@@ -159,10 +161,12 @@ def index(request):
     senddata['yesterdaytotaltime']=yesterdayhour*60*60+yesterdayminutes*60+yesterdaysec
     
     #This Week
+    senddata['thisweeknumdays']=thisweeknumdays
     senddata['thisweekhour']=thisweekhour
     senddata['thisweekminutes']=thisweekminutes
     
     #Last Week
+    senddata['lastweeknumdays']=lastweeknumdays
     senddata['lastweekhour']=lastweekhour
     senddata['lastweekminutes']=lastweekminutes
 

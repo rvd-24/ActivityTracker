@@ -195,9 +195,15 @@ def setalarms(request):
                 detail['settime']=datestr
                 alarmdetails.append(detail)
                 print("SAKGHJDJGH",alarm)
-                lst=[x for x in alarmdetails if x not in alarm]# To add the alarms
-                for i in lst:
-                    alarm.append(i)
+                lst=[]
+                for i in alarm:
+                    if(i['url'] in getalarmname):
+                       i['time']=time
+                       i['Set time']=datestr
+                    else:
+                        alarm.append(detail)
+
+                print("LST",lst)
                 stuff.alarmdet=str(alarm)
                 stuff.email=request.user.email
                 stuff.save()
@@ -217,11 +223,10 @@ def setalarms(request):
                 detail={}
                 now=datetime.now()
                 datestr=now.strftime("%d/%m/%Y %H:%M:%S")
-                detail['url']=i['url']
+                detail['url']=getalarmname
                 detail['time']=time
                 detail['settime']=datestr
                 alarmdetails.append(detail)
-
             else:
                 print("Alarm Url has never been active or opened!")
             print("Alarm Set")                
@@ -233,7 +238,7 @@ def setalarms(request):
     if request.user.is_authenticated and alarmdetail.objects.filter(email=request.user.email).exists():
         alarm=alarmdetail.objects.get(email=request.user.email)
         alarm=eval(alarm.alarmdet)
-        print(alarm)
+        # print(alarm)
         return render(request,'alarmindex.html',{'alarm':alarm})
     else:
         return render(request,'alarmindex.html')

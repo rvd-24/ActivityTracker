@@ -76,7 +76,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                 tabdata.opentabs.push({id:tab.id,url:u.hostname,opentime:d,fullurl:u.href});
             }
         }
-        console.log(tabdata.opentabs);
+        // console.log(tabdata.opentabs);
         tabdata.opentabs = tabdata.opentabs.filter((value, index, self) =>
             index === self.findIndex((t) => (
                 t.id === value.id && t.url === value.url
@@ -234,7 +234,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                         periodInMinutes:0.5
                     })*/
                     alarms=tabdata.Alarms     
-                    console.log("alarm",alarms);               
+                    console.log("alarm fetched",alarms);               
                 }
             })
         },5000);
@@ -242,7 +242,129 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         chrome.alarms.getAll(function(alarms){
             chrome.alarms.clear(alarms.name);
         })
-        /*chrome.tabs.onActivated.addListener(function(tab){
+            
+});
+
+chrome.tabs.onActivated.addListener(function(tab){
+    hour=0
+    minute=0
+    second=0
+    milliseconds=0
+    for(var i=0;i<alarmtime.length;i++){
+        if(alarmtime[i].id===tab.tabId){
+            hour=alarmtime[i].hours
+            minute=alarmtime[i].minutes
+            second=alarmtime[i].seconds
+        }
+    }
+    console.log("Alarm Running");
+    if(int!==null){
+        clearInterval(int);
+    }
+    int = setInterval(mainTime,10);
+    function mainTime(){
+        milliseconds+=10;
+        if(milliseconds == 1000){
+                milliseconds = 0;
+                second++;
+            if(second == 60){
+                second = 0;
+                minute++;
+                if(minute == 60){
+                    minute = 0;
+                    hours++;
+                }
+            }
+        }
+        let h = hour < 10 ? "0" + hour : hour;
+        let m = minute < 10 ? "0" + minute : minute;
+        let s = second < 10 ? "0" + second : second;
+        let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
+        
+        tabtime.hours=`${h}`;
+        tabtime.seconds=`${s}`;
+        
+        tabtime.minutes= `${m}`;
+        tabtime.millisec=`${ms}`
+                    
+        tabidexists=false;
+        for(var i=0;i<alarmtime.length;i++){
+            if(alarmtime[i].id===tab.tabId){
+                alarmtime[i].hours=parseInt(tabtime.hours);
+                alarmtime[i].minutes=parseInt(tabtime.minutes);
+                alarmtime[i].seconds=parseInt(tabtime.seconds);
+                tabidexists=true;
+            }
+        }
+        if(tabidexists===false){
+            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds)});
+        }
+}
+    console.log("[alarmtime]Alarm Running time",alarmtime);
+});
+chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){  
+    function alarmexec(resalarm){
+        console.log("Executing Alarm : ",tabId);
+        for(var i=0;i<tabdata.opentabs.length;i++){
+            for(var j=0;j<resalarm.length;j++){
+                if(resalarm[j].url===tabdata.opentabs[i].url && tabId===tabdata.opentabs[i].id){
+                    var alarmid=tabdata.opentabs[i].id
+                    for(var k=0;k<alarmtime.length;k++){
+                        var activealarmtime=alarmtime[k].hours*60*60+alarmtime[k].minutes*60+alarmtime[k].seconds
+                        if(tabdata.opentabs[i].id===alarmtime[k].id &&  activealarmtime>=resalarm[j].time&& tabId===alarmid){
+                            console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime);
+                            console.log(tabId,tabdata.opentabs[i]);
+                            var alarmname=resalarm[j].url
+                            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
+                                console.log(tabs[0].id);
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    var alarmflag=setInterval(()=>{
+        chrome.storage.sync.get('Alarms',result=>{
+            console.log(result.Alarms[0]);
+            // alarmsubmit(result.Alarms);
+            alarmexec(result.Alarms);
+            clearInterval(alarmflag);
+        })
+    },2000);
+});
+
+chrome.extension.onConnect.addListener(function(port) {
+    console.log("Connected .....");
+    port.onMessage.addListener(function(msg) {
+        console.log("message recieved" + msg);
+        port.postMessage(tabdata);
+    });
+})
+
+/*Trash Code
+// const opent=new Set(tabdata.opentabs)
+        // console.log(opent);
+        // tabdata.opentabs = cleanopentabs(tabdata.opentabs);
+
+
+// tabdata.opentabs = tabdata.opentabs.filter((tabdata.opentabs, index, self) => index === self.findIndex((t) => (t.id === tabdata.opentabs.id && t.url === tabdata.opentabs.url)))
+        /*const containsuser = !!tabdata.opentabs.find(user => {  
+            return (user.id === tabdata.opentabs.id&& user.url===tab.tabdata.opentabsurl)
+          });
+          console.log(containsuser);
+          if(containsuser===false){
+            console.log('opentabs updated');
+            tabdata.opentabs.push({id:tab.id,url:tab.url})
+          }
+
+/*console.log("New tab opened");
+        console.log(tab.id+tab.url);
+        console.log(tabdata.opentabs);
+          
+*/
+/*chrome.tabs.onActivated.addListener(function(tab){
             function alarmsubmit(alarm){
                 console.log("Alarm: ",alarm);
                 
@@ -375,128 +497,26 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                     });
         }
                 })*/
-            
-});
-
-chrome.tabs.onActivated.addListener(function(tab){
-                    hour=0
-                    minute=0
-                    second=0
-                    milliseconds=0
-                    for(var i=0;i<alarmtime.length;i++){
-                        if(alarmtime[i].id===tab.tabId){
-                            hour=alarmtime[i].hours
-                            minute=alarmtime[i].minutes
-                            second=alarmtime[i].seconds
-                        }
-                    }
-                    console.log("Alarm Running");
-                    if(int!==null){
-                        clearInterval(int);
-                    }
-                    int = setInterval(mainTime,10);
-                    function mainTime(){
-                        milliseconds+=10;
-                        if(milliseconds == 1000){
-                                milliseconds = 0;
-                                second++;
-                            if(second == 60){
-                                second = 0;
-                                minute++;
-                                if(minute == 60){
-                                    minute = 0;
-                                    hours++;
-                                }
-                            }
-                        }
-                        let h = hour < 10 ? "0" + hour : hour;
-                        let m = minute < 10 ? "0" + minute : minute;
-                        let s = second < 10 ? "0" + second : second;
-                        let ms = milliseconds < 10 ? "00" + milliseconds : milliseconds < 100 ? "0" + milliseconds : milliseconds;
-                        
-                        tabtime.hours=`${h}`;
-                        tabtime.seconds=`${s}`;
-                        
-                        tabtime.minutes= `${m}`;
-                        tabtime.millisec=`${ms}`
-                                    
-                        tabidexists=false;
-                        for(var i=0;i<alarmtime.length;i++){
-                            if(alarmtime[i].id===tab.tabId){
-                                alarmtime[i].hours=parseInt(tabtime.hours);
-                                alarmtime[i].minutes=parseInt(tabtime.minutes);
-                                alarmtime[i].seconds=parseInt(tabtime.seconds);
-                                tabidexists=true;
-                            }
-                        }
-                        if(tabidexists===false){
-                            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds)});
-                        }
-                
-            }
-                console.log("Alarm Running time",alarmtime);
-
-                function alarmsubmit(resalarm){
-                    for(var i=0;i<tabdata.opentabs.length;i++){
-                        for(var j=0;j<alarmtime.length;j++){
-                            for(var k=0;k<resalarm.length;k++){
-                                if(tabdata.opentabs[i].id===alarmtime[j].id && tabdata.opentabs[i].url===resalarm[k].url){
-                                    var alarmid=alarmtime[j].id
-                                    var alarmname=resalarm[k].url
-                                    var alarmsettime=resalarm[k].time
-                                    var activealarmtime=alarmtime[j].hours*60*60+alarmtime[j].minutes*60+alarmtime[j].seconds
-                                    console.log(alarmid,alarmsettime);
-                                    if(alarmtime[j].id===alarmid&& activealarmtime>=alarmsettime){
-                                        console.log("Alarm FIREdDDD")
-                                        console.log(tab.tabId,tabdata.opentabs[i]);
-                                        chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                                            chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
-                                            console.log(tabs[0].id);
-                                        });
-                                    }
-                                }
-                            }
+/*function alarmsubmit(resalarm){
+        for(var i=0;i<tabdata.opentabs.length;i++){
+            for(var j=0;j<alarmtime.length;j++){
+                for(var k=0;k<resalarm.length;k++){
+                    if(tabdata.opentabs[i].id===alarmtime[j].id && tabdata.opentabs[i].url===resalarm[k].url){
+                        var alarmid=alarmtime[j].id
+                        var alarmname=resalarm[k].url
+                        var alarmdurationtime=resalarm[k].time
+                        var activealarmtime=alarmtime[j].hours*60*60+alarmtime[j].minutes*60+alarmtime[j].seconds
+                        console.log(alarmid,alarmdurationtime);
+                        if(alarmtime[j].id===alarmid&& activealarmtime>=alarmdurationtime){
+                            console.log("Alarm Fired for ",alarmid,alarmname,activealarmtime);
+                            console.log(tab.tabId,tabdata.opentabs[i]);
+                            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
+                                console.log(tabs[0].id);
+                            });
                         }
                     }
                 }
-                var alarmflag=setInterval(()=>{
-                    chrome.storage.sync.get('Alarms',result=>{
-                        console.log(result.Alarms[0]);
-                        alarmsubmit(result.Alarms);
-                        clearInterval(alarmflag);
-                    })
-            },2000);
-        });
-
-
-chrome.extension.onConnect.addListener(function(port) {
-    console.log("Connected .....");
-    port.onMessage.addListener(function(msg) {
-        console.log("message recieved" + msg);
-        port.postMessage(tabdata);
-    });
-})
-
-/*Trash Code
-// const opent=new Set(tabdata.opentabs)
-        // console.log(opent);
-        // tabdata.opentabs = cleanopentabs(tabdata.opentabs);
-
-
-// tabdata.opentabs = tabdata.opentabs.filter((tabdata.opentabs, index, self) => index === self.findIndex((t) => (t.id === tabdata.opentabs.id && t.url === tabdata.opentabs.url)))
-        /*const containsuser = !!tabdata.opentabs.find(user => {  
-            return (user.id === tabdata.opentabs.id&& user.url===tab.tabdata.opentabsurl)
-          });
-          console.log(containsuser);
-          if(containsuser===false){
-            console.log('opentabs updated');
-            tabdata.opentabs.push({id:tab.id,url:tab.url})
-          }
-
-/*console.log("New tab opened");
-        console.log(tab.id+tab.url);
-        console.log(tabdata.opentabs);
-          
-
-
-*/
+            }
+        }
+    }*/

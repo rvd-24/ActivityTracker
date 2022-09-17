@@ -2,6 +2,7 @@ from typing import Set
 from django.http import HttpResponse
 from django.shortcuts import render
 from tabtracker.models import trackdetails
+from tabtracker.models import alarmdetail
 from datetime import datetime
 import pytz
 from django.utils import timezone
@@ -66,9 +67,9 @@ def index(request):
       if((datetime.now()-i['opentime']).days>=1 and (datetime.now()-i['opentime']).days<2):
         for j in activetime:
           if(i['id'] in j.values()):
-            print("Yesterday",i)
-            print(j)
-            print("\n")
+            # print("Yesterday",i)
+            # print(j)
+            # print("\n")
             yesterdaytime+=j['seconds']+j['minutes']*60+j['hours']*60*60
       
       if((datetime.now()-i['opentime']).days<1):
@@ -132,14 +133,14 @@ def index(request):
 
     for i in finalmostusedtoday:
       print("FMT",i)
-    for i in finalmostusedthisweek:
-      print("FMTW",i)
+    # for i in finalmostusedthisweek:
+    #   print("FMTW",i)
     finalmostusedtoday=finalmostusedtoday[:5]
     finalmostusedthisweek=finalmostusedthisweek[:5]
 
-    print("Today",todayhour,todayminutes)
-    print(todaytime)
-    print(thisweektime)
+    # print("Today",todayhour,todayminutes)
+    # print(todaytime)
+    # print(thisweektime)
 
     senddata['opentabs']=opentabs
     senddata['closedtabs']=closedtabs

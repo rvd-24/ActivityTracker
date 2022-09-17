@@ -153,13 +153,6 @@ def sendchartdata(request):
     else:
         return HttpResponse('indexw.html')
 
-def set_alarms(request):
-    if request.method=='GET':
-        if request.user.is_authenticated  and alarmdetail.objects.filter(email=request.user.email).exists():
-            alarmstuff=alarmdetail.objects.get(email=request.user.email)
-            alarm=eval(alarmstuff.alarmdet)
-            return HttpResponse(json.dumps(alarm),content_type="application/json")
-
 def setalarms(request):
     print(request.method)
     if request.method=='POST':
@@ -167,13 +160,14 @@ def setalarms(request):
         hour=int(request.POST['hour'])
         minute=int(request.POST['minute'])
         time=minute*60+hour*60*60
-        print("TIME",time)
+        print("Time fetched for alarm:",time)
         stuff=trackdetails.objects.get(email=request.user.email)
         opentabs=eval(stuff.opentabs)
         activetime=eval(stuff.activetime)
         closetabs=eval(stuff.closetabs)
         alarmdetails=[]
-        
+        checkalarmflag=0
+        getalarmname=""
         for i in opentabs:
             for j in closetabs:
                 for k in activetime:
@@ -181,48 +175,75 @@ def setalarms(request):
                         opentabs.remove(i)
                         activetime.remove(k)
         
-        # for i in opentabs:
-        #     for j in activetime:
-        #         if(i['id']==j['id']):
-        #             print("removed",i,j)
-
         if alarmdetail.objects.filter(email=request.user.email).exists():
             stuff=alarmdetail.objects.get(email=request.user.email)
             alarm=eval(stuff.alarmdet)
+            print(type(alarm))
             for i in opentabs:
                 for j in activetime:
                     if(i['id']==j['id']):
-                        print(i['url'])
                         if url in i['url']:
-                            print("FOUND",url,i['url'])
-                            detail={}
-                            now=datetime.now()
-                            datestr=now.strftime("%d/%m/%Y %H:%M:%S")
-                            detail['url']=i['url']
-                            detail['time']=time
-                            detail['settime']=datestr
-                            alarmdetails.append(detail)
-                            print("akla",alarmdetails)
-                            stuff.alarmdet=str(alarmdetails)
-                            stuff.email=request.user.email
-                            stuff.save()
-                            break;
+                            print("Url Exists:",url,i['url'])
+                            getalarmname=i['url']
+                            checkalarmflag=1
+            if(checkalarmflag==1):
+                detail={}
+                now=datetime.now()
+                datestr=now.strftime("%d/%m/%Y %H:%M:%S")
+                detail['url']=getalarmname
+                detail['time']=time
+                detail['settime']=datestr
+                alarmdetails.append(detail)
+                print("SAKGHJDJGH",alarm)
+                lst=[x for x in alarmdetails if x not in alarm]# To add the alarms
+                for i in lst:
+                    alarm.append(i)
+                stuff.alarmdet=str(alarm)
+                stuff.email=request.user.email
+                stuff.save()
+                print("Alarm Updated!")
+                        
+            else:
+                print("Url has never been active or opened!")
         else:
             for i in opentabs:
                 for j in activetime:
                     if(i['id']==j['id']):
-                        print(i['url'])
                         if url in i['url']:
                             print("FOUND",url,i['url'])
-                            detail={}
-                            now=datetime.now()
-                            datestr=now.strftime("%d/%m/%Y %H:%M:%S")
-                            detail['url']=i['url']
-                            detail['time']=time
-                            detail['settime']=datestr
-                            alarmdetails.append(detail)
-                            break;
-                            
+                            getalarmname=i['url']
+                            checkalarmflag=1
+            if(checkalarmflag==1):
+                detail={}
+                now=datetime.now()
+                datestr=now.strftime("%d/%m/%Y %H:%M:%S")
+                detail['url']=i['url']
+                detail['time']=time
+                detail['settime']=datestr
+                alarmdetails.append(detail)
+
+            else:
+                print("Alarm Url has never been active or opened!")
+            print("Alarm Set")                
             stuff=alarmdetail(alarmdet=str(alarmdetails),email=request.user.email)
             stuff.save()
-    return render(request,'alarmindex.html')
+    else:
+        print("Incorrect request")
+    #To Display the alarms on the webpage
+    if request.user.is_authenticated and alarmdetail.objects.filter(email=request.user.email).exists():
+        alarm=alarmdetail.objects.get(email=request.user.email)
+        alarm=eval(alarm.alarmdet)
+        print(alarm)
+        return render(request,'alarmindex.html',{'alarm':alarm})
+    else:
+        return render(request,'alarmindex.html')
+
+#To send the alarms back to background.js to set the alert in js
+def set_alarms(request):
+    if request.method=='GET':
+        if request.user.is_authenticated  and alarmdetail.objects.filter(email=request.user.email).exists():
+            alarmstuff=alarmdetail.objects.get(email=request.user.email)
+            alarm=eval(alarmstuff.alarmdet)
+            return HttpResponse(json.dumps(alarm),content_type="application/json")
+        else:
+            return render(request,'alarmindex.html')

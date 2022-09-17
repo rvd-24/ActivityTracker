@@ -302,6 +302,7 @@ chrome.tabs.onActivated.addListener(function(tab){
 }
     console.log("[alarmtime]Alarm Running time",alarmtime);
 });
+var alarmfired = false;
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){  
     function alarmexec(resalarm){
         console.log("Executing Alarm : ",tabId);
@@ -312,13 +313,17 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
                     for(var k=0;k<alarmtime.length;k++){
                         var activealarmtime=alarmtime[k].hours*60*60+alarmtime[k].minutes*60+alarmtime[k].seconds
                         if(tabdata.opentabs[i].id===alarmtime[k].id &&  activealarmtime>=resalarm[j].time&& tabId===alarmid){
-                            console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime);
+                            if(!alarmfired){
+                                console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime);
                             console.log(tabId,tabdata.opentabs[i]);
                             var alarmname=resalarm[j].url
                             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
                                 chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
                                 console.log(tabs[0].id);
                             });
+                            alarmfired=true;
+                            }
+                            
                         }
                     }
                 }

@@ -327,7 +327,7 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
                             console.log(tabId,tabdata.opentabs[i]);
                             var alarmname=resalarm[j].url
                             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n"+Math.floor(Math.random()*thoughts.length)});
+                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n"+thougts[Math.floor(Math.random()*thoughts.length)]});
                                 console.log(tabs[0].id);
                             });
                             alarmtime[k].alarmfired=true;

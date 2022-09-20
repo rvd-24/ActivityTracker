@@ -45,7 +45,8 @@ var alarmtime=[{
     "url":"",
     "hours":0,
     "minutes":0,
-     "seconds":0
+     "seconds":0,
+     "alarmfired":false
 }]
 chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
@@ -297,12 +298,20 @@ chrome.tabs.onActivated.addListener(function(tab){
             }
         }
         if(tabidexists===false){
-            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds)});
+            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds),alarmfired:false});
         }
 }
     console.log("[alarmtime]Alarm Running time",alarmtime);
 });
-var alarmfired = false;
+var thoughts=["You are not a Procrastinator! You're just productive at unimportant things.","Procrastionation: Working tomorrow for a better today.","If there was a pill to cure procrastination, you would probably take it tomorrow.",
+    "Procrastination taught us how to do 30 minutes of work in 8 hours and 8 hours of work in 30 minutes.",
+    "Nothing makes a person more productive than the last minute.",
+    "Work is the greatest thing in the world, so we should always save some of it for tomorrow!",
+    "Due tomorrow? Do tomorrow.","If good things come to those who wait. Why is procrastinating bad?",
+    "Procrastinator? No. You save all your homework until the last minute because then you’ll be older, and therefore wiser."]
+
+
+
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){  
     function alarmexec(resalarm){
         console.log("Executing Alarm : ",tabId);
@@ -313,15 +322,15 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
                     for(var k=0;k<alarmtime.length;k++){
                         var activealarmtime=alarmtime[k].hours*60*60+alarmtime[k].minutes*60+alarmtime[k].seconds
                         if(tabdata.opentabs[i].id===alarmtime[k].id &&  activealarmtime>=resalarm[j].time&& tabId===alarmid){
-                            if(!alarmfired){
+                            if(!alarmtime[k].alarmfired){
                                 console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime);
                             console.log(tabId,tabdata.opentabs[i]);
                             var alarmname=resalarm[j].url
                             chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
+                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n"+Math.floor(Math.random()*thoughts.length)});
                                 console.log(tabs[0].id);
                             });
-                            alarmfired=true;
+                            alarmtime[k].alarmfired=true;
                             }
                             
                         }

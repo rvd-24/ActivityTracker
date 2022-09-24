@@ -3,6 +3,8 @@ from telnetlib import ENCRYPT
 import django_heroku
 import dj_database_url
 from decouple import config
+from django.core.management.utils import get_random_secret_key
+
 """
 Django settings for activitytracker project.
 
@@ -27,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 from decouple import config
 
-SECRET_KEY = "django-insecure-ucf=ik@-tafh6n@y)ju*6p_r__(4*urnkh3+t6_xpd19!*c0_u"
+SECRET_KEY = get_random_secret_key()
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 

@@ -1,1 +1,3 @@
-web: gunicorn activitytracker.wsgi
+web: gunicorn activitytracker.wsgi:application  --log-file - --log-level debug
+python manage.py collectstatic --noinput
+manage.py migrate

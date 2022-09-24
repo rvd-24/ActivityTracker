@@ -31,7 +31,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["chrome-extension://mdchgpcpbbmjnoelkiinjjpbckciimen","127.0.0.1","localhost"]
+ALLOWED_HOSTS = ["chrome-extension://mdchgpcpbbmjnoelkiinjjpbckciimen","127.0.0.1","localhost",'.herokuapp.com']
 
 CSRF_TRUSTED_ORIGINS = ["chrome-extension://mdchgpcpbbmjnoelkiinjjpbckciimen"]
 

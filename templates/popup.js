@@ -14,27 +14,27 @@ port.onMessage.addListener(function(msg) {
 console.log(msg.user_authenticated.length);
 let LoginButton = document.getElementById('loginbtn');
 if(msg.user_authenticated.length===0){
-    chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+    chrome.browserAction.setPopup({ popup: 'templates/popup.html' });    
 }
 else{
     if(msg.user_authenticated==="not logged in"){
-        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+        chrome.browserAction.setPopup({ popup: 'templates/popup.html' });    
     }
     else{
-        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup2.html' });    
+        chrome.browserAction.setPopup({ popup: 'templates/popup2.html' });    
 
     }
 }
 LoginButton.addEventListener('click', function () {
     if(msg.user_authenticated.length===0){
-        chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+        chrome.browserAction.setPopup({ popup: 'templates/popup.html' });    
     }
     else{
         if(msg.user_authenticated==="not logged in"){
-            chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup.html' });    
+            chrome.browserAction.setPopup({ popup: 'templates/popup.html' });    
         }
         else{
-            chrome.browserAction.setPopup({ popup: 'activitytracker/templates/popup2.html' });   
+            chrome.browserAction.setPopup({ popup: 'templates/popup2.html' });   
         }
     }
 });

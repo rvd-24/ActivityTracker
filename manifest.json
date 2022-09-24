@@ -7,16 +7,16 @@
             "matches":[
                 "<all_urls>"
             ],
-            "js":["activitytracker/templates/content.js"]
+            "js":["templates/content.js"]
         }
     ],
     "background":{
-        "scripts":["activitytracker/templates/jquery-3.1.0.min.js","activitytracker/templates/background.js"]
+        "scripts":["templates/jquery-3.1.0.min.js","templates/background.js"]
     },
     "permissions":["tabs","serial","https://cdn.jsdelivr.net/npm/chart.js","http://127.0.0.1:8000/","notifications","alarms","storage"],
     "browser_action":{
-        "default_icon":"activitytracker/templates/icon16.png",
-        "default_popup":"activitytracker/templates/popup.html",
+        "default_icon":"templates/icon16.png",
+        "default_popup":"templates/popup.html",
         "default_title":"A popup is displayed"
     },
     "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js 'sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA=='"

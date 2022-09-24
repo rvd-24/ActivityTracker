@@ -46,7 +46,8 @@ var alarmtime=[{
     "hours":0,
     "minutes":0,
      "seconds":0,
-     "alarmfired":false
+     "alarmfired":false,
+     "fire_count":0
 }]
 chrome.tabs.query({windowType:'normal'},function(tabs){
     let [milliseconds,seconds,minutes,hours] = [0,0,0,0];
@@ -56,7 +57,13 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     tabdata.closetabs.pop();
     for(i=0;i<tabs.length;i++){
         if(tabs[i].url!='chrome://newtab/'&&tabs[i].url.includes("file://")===false){
-            var u=new URL(tabs[i].url);
+                try{
+                    var u=new URL(tabs[i].url);
+                }
+                catch(err){
+                    console.log(err);
+                    console.log("Please refresh the extension");
+                }
                 tabdata.opentabs.push({id:tabs[i].id,url:u.hostname,opentime:new Date(),fullurl:u.href});
             }
     }
@@ -298,7 +305,7 @@ chrome.tabs.onActivated.addListener(function(tab){
             }
         }
         if(tabidexists===false){
-            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds),alarmfired:false});
+            alarmtime.push({id:tab.tabId,hours:parseInt(tabtime.hours),minutes:parseInt(tabtime.minutes),seconds:parseInt(tabtime.seconds),alarmfired:false,fire_count:0});
         }
 }
     console.log("[alarmtime]Alarm Running time",alarmtime);
@@ -311,28 +318,28 @@ var thoughts=["You are not a Procrastinator! You're just productive at unimporta
     "Procrastinator? No. You save all your homework until the last minute because then you’ll be older, and therefore wiser."]
 
 
-
 chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){  
     function alarmexec(resalarm){
         console.log("Executing Alarm : ",tabId);
         for(var i=0;i<tabdata.opentabs.length;i++){
             for(var j=0;j<resalarm.length;j++){
                 if(resalarm[j].url===tabdata.opentabs[i].url && tabId===tabdata.opentabs[i].id){
-                    var alarmid=tabdata.opentabs[i].id
+                    var alarmid=tabdata.opentabs[i].id;
                     for(var k=0;k<alarmtime.length;k++){
                         var activealarmtime=alarmtime[k].hours*60*60+alarmtime[k].minutes*60+alarmtime[k].seconds
                         if(tabdata.opentabs[i].id===alarmtime[k].id &&  activealarmtime>=resalarm[j].time&& tabId===alarmid){
                             if(!alarmtime[k].alarmfired){
-                                console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime);
-                            console.log(tabId,tabdata.opentabs[i]);
-                            var alarmname=resalarm[j].url
-                            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n"+thougts[Math.floor(Math.random()*thoughts.length)]});
-                                console.log(tabs[0].id);
-                            });
-                            alarmtime[k].alarmfired=true;
+                                console.log("Alarm Fired for ",alarmtime[k].id,resalarm[j].url,activealarmtime,alarmtime[k].fire_count);
+                                console.log(tabId,tabdata.opentabs[i]);
+                                var alarmname=resalarm[j].url;
+                                chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
+                                    chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n"+thoughts[Math.floor(Math.random()*thoughts.length)]});
+                                    console.log(tabs[0].id);   
+                            });alarmtime[k].fire_count++;
+                                    if(alarmtime[k].fire_count>1){
+                                        alarmtime[k].alarmfired=true
+                                    }
                             }
-                            
                         }
                     }
                 }
@@ -348,7 +355,10 @@ chrome.tabs.onUpdated.addListener(function(tabId,changeInfo,tab){
         })
     },2000);
 });
-
+chrome.storage.sync.get('user_authenticated',result=>{
+    console.log(result.user_authenticated);
+    tabdata.user_authenticated=result.user_authenticated
+})
 chrome.extension.onConnect.addListener(function(port) {
     console.log("Connected .....");
     port.onMessage.addListener(function(msg) {
@@ -358,118 +368,6 @@ chrome.extension.onConnect.addListener(function(port) {
 })
 
 /*Trash Code
-// const opent=new Set(tabdata.opentabs)
-        // console.log(opent);
-        // tabdata.opentabs = cleanopentabs(tabdata.opentabs);
-
-
-// tabdata.opentabs = tabdata.opentabs.filter((tabdata.opentabs, index, self) => index === self.findIndex((t) => (t.id === tabdata.opentabs.id && t.url === tabdata.opentabs.url)))
-        /*const containsuser = !!tabdata.opentabs.find(user => {  
-            return (user.id === tabdata.opentabs.id&& user.url===tab.tabdata.opentabsurl)
-          });
-          console.log(containsuser);
-          if(containsuser===false){
-            console.log('opentabs updated');
-            tabdata.opentabs.push({id:tab.id,url:tab.url})
-          }
-
-/*console.log("New tab opened");
-        console.log(tab.id+tab.url);
-        console.log(tabdata.opentabs);
-          
-*/
-/*chrome.tabs.onActivated.addListener(function(tab){
-            function alarmsubmit(alarm){
-                console.log("Alarm: ",alarm);
-                
-                for(var i=0;i<alarm.length;i++){
-                    var alarmName=alarm[i].url
-                    chrome.alarms.create(alarmName,{
-                        when:Date.now(),
-                        periodInMinutes:0.1
-                        
-                })
-                chrome.alarms.getAll(function(alarms){
-                    console.log(alarms)
-                })
-                chrome.alarms.onAlarm.addListener((a)=>{
-                    for(var i=0;i<tabdata.opentabs.length;i++){
-                        for(var j=0;j<tabdata.activetime.length;j++){
-                            if(tabdata.opentabs[i].id===tabdata.activetime[j].id && tabdata.opentabs[i].url===alarmName){
-                                if(tabdata.activetime[j].id===tab.tabId &&a.name===alarmName){
-                                    alert("Alarm for "+alarmName+"\nYou are not a Procrastinator! You are just productive at unimportant things.");
-
-                                }
-                            }
-                        }
-                    }
-                })
-                }
-                console.log(alarm);
-                for(var i=0;i<tabdata.opentabs;i++){
-                        console.log("HI");
-                        for(var j=0;j<tabdata.activetime;j++){
-                            if(tabdata.opentabs[i].id===tabdata.activetime[j].id){
-                                console.log("tab running",tabdata.opentabs[i].url);
-                            }
-                        }
-                    }
-            }
-            
-            },2000);
-*/
-            
-        
-        // var alarmflag=setInterval(()=>{
-        //     chrome.storage.sync.set(tabdata, () => {
-        //         chrome.storage.sync.get('opentabs', result => {
-        //           console.log('Opentabs from storage:', result.opentabs);
-        //         });
-        //         chrome.storage.sync.get(tabdata, result => {
-        //             console.log('All values recv from storage', result);
-        //             if(result.Alarms[0].url.length>0){
-        //                 console.log("Alarms Found",result.Alarms);
-        //                 for(var i=0;i<result.opentabs;i++){
-        //                     console.log("HI");
-        //                     for(var j=0;j<result.activetime;j++){
-        //                         if(result.opentabs[i].id===result.activetime[j].id){
-        //                             console.log("tab running",tabdata.opentabs[i].url);
-        //                         }
-        //                     }
-        //                 }
-        //                 clearInterval(alarmflag);
-        //             }
-        //           });
-        //         });
-        // },2000)
-        // function firealarms(){
-
-        // }
-            /*chrome.storage.sync.get(tabdata, result => {
-                console.log('All values recv from storage', result);
-              });
-              chrome.storage.sync.get(tabdata,result =>{
-                for(var i=0;i<result.Alarms.length;i++){
-                    chrome.alarms.create(result.Alarms[i].url,{
-                        when:Date.now(),
-                        periodInMinutes:0.1
-                    })
-                }
-                for(var i=0;i<result.opentabs.length;i++){
-                    for(var j=0;j<result.activetime;j++){
-                        if(res.opentabs[i].id===result.activetime[j].id){
-                        for(var k=0;k<result.Alarms.length;k++){
-                            if(result.Alarms[i].url===result.opentabs[i].url){
-                                console.log(reults.opentabs[i].url,result.opentabs[j])
-                            }
-                        }
-                        }
-                    }
-                }
-                
-                
-            })*/
-
     /*chrome.storage.onChanged.addListener(function (changes, namespace) {
         for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
           console.log(
@@ -511,26 +409,3 @@ chrome.extension.onConnect.addListener(function(port) {
                     });
         }
                 })*/
-/*function alarmsubmit(resalarm){
-        for(var i=0;i<tabdata.opentabs.length;i++){
-            for(var j=0;j<alarmtime.length;j++){
-                for(var k=0;k<resalarm.length;k++){
-                    if(tabdata.opentabs[i].id===alarmtime[j].id && tabdata.opentabs[i].url===resalarm[k].url){
-                        var alarmid=alarmtime[j].id
-                        var alarmname=resalarm[k].url
-                        var alarmdurationtime=resalarm[k].time
-                        var activealarmtime=alarmtime[j].hours*60*60+alarmtime[j].minutes*60+alarmtime[j].seconds
-                        console.log(alarmid,alarmdurationtime);
-                        if(alarmtime[j].id===alarmid&& activealarmtime>=alarmdurationtime){
-                            console.log("Alarm Fired for ",alarmid,alarmname,activealarmtime);
-                            console.log(tab.tabId,tabdata.opentabs[i]);
-                            chrome.tabs.query({active: true, currentWindow: true}, function(tabs){
-                                chrome.tabs.sendMessage(tabs[0].id, {content: "Alarm for "+alarmname+"\n You are not a Procrastinator! You're just productive at unimportant things."});
-                                console.log(tabs[0].id);
-                            });
-                        }
-                    }
-                }
-            }
-        }
-    }*/

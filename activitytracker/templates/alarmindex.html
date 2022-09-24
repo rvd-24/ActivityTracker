@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <title>Activity Tracker Time Setter</title>
     <link rel="stylesheet" href="{% static 'styles/alarmstyle.css'%}">
 </head>
@@ -20,9 +21,14 @@
         <input type="number" min="0" name="minute" max="60"value="0"><p>m</p>
         <button type="submit" onclick="redirect()">set</button>
     </form>
+    <div id="msg" align="center">{% for message in messages%}
+            <h3>{{message}}</h3>
+            {% endfor %}
+    </div>
     <div class="list">
         {%for a in alarm%}
-        <p align="center"><b>Url:</b>{{a.url}}&nbsp;&nbsp;<b>time:</b>{{a.time}}&nbsp;&nbsp;<b>Set time:</b>{{a.settime}}</p><hr>
+        <p align="center"><b>Url:</b>{{a.url}}&emsp;&emsp;&emsp;&emsp;<b>Time:</b>{{a.time}}&emsp;&emsp;&emsp;&emsp;<b>Set time:</b>{{a.settime}}
+        <a href="{% url 'deletealarms' a.url %}" class="btn btn-outline-danger btn-sm">Delete</a></p><hr>
         {%endfor%}
     </div>
     <script>

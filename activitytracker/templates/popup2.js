@@ -21,6 +21,7 @@ for(var i=0;i<tab.length;i++){
       }
    }
 }
+
 console.log(openturl);
 console.log("open",opentabs);
 console.log("close",closetabs);
@@ -48,10 +49,6 @@ const labels = [];
 for(var i=0;i<opentabs.length;i++){
    labels.push(opentabs[i].url);
 }
-for(var i=0;i<closetabs.length;i++){
-   labels.push(closetabs[i].url);
-}
-
 
 console.log("labels",opentabs);
 time=[]

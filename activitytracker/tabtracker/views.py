@@ -1,10 +1,12 @@
 import json
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .forms import ContactModelForm
 from datetime import datetime
 from django.contrib.auth import get_user_model
+from django.contrib import messages
+
 User = get_user_model()
 import pytz
 import re
@@ -194,15 +196,19 @@ def setalarms(request):
                 detail['time']=time
                 detail['settime']=datestr
                 alarmdetails.append(detail)
-                print("SAKGHJDJGH",alarm)
+                print("Alarm before updating",alarm)
                 lst=[]
+                updateflag=0
                 for i in alarm:
                     if(i['url'] in getalarmname):
                        i['time']=time
                        i['Set time']=datestr
-                    else:
-                        alarm.append(detail)
-
+                       updateflag=1
+                
+                if(updateflag==0):
+                    alarm.append(detail)
+                print("Detail",detail)
+                print("SAKGHJDJGH",alarm)
                 print("LST",lst)
                 stuff.alarmdet=str(alarm)
                 stuff.email=request.user.email
@@ -211,6 +217,7 @@ def setalarms(request):
                         
             else:
                 print("Url has never been active or opened!")
+                messages.info(request,"Url has never been active or opened!")
         else:
             for i in opentabs:
                 for j in activetime:
@@ -229,6 +236,7 @@ def setalarms(request):
                 alarmdetails.append(detail)
             else:
                 print("Alarm Url has never been active or opened!")
+                messages.info(request,"Alarm URL has never been active or opened!")
             print("Alarm Set")                
             stuff=alarmdetail(alarmdet=str(alarmdetails),email=request.user.email)
             stuff.save()
@@ -252,3 +260,15 @@ def set_alarms(request):
             return HttpResponse(json.dumps(alarm),content_type="application/json")
         else:
             return render(request,'alarmindex.html')
+
+def deletealarms(request,alarmurl):
+    if request.user.is_authenticated  and alarmdetail.objects.filter(email=request.user.email).exists():
+            alarmstuff=alarmdetail.objects.get(email=request.user.email)
+            alarm=eval(alarmstuff.alarmdet)
+            for i in alarm:
+                if(i['url']==alarmurl):
+                    alarm.remove(i)  
+            alarmstuff.alarmdet=str(alarm)
+            alarmstuff.email=request.user.email
+            alarmstuff.save()
+            return redirect("http://127.0.0.1:8000/setalarms")

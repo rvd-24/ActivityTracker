@@ -1,0 +1,60 @@
+@import 'https://fonts.googleapis.com/css?family=Montserrat:300,400,700';
+body{
+    background-color: black;
+    color: white;
+    font-family: Montserrat, sans-serif;
+}
+h1{
+    text-align: center;
+    color: yellow;
+}
+.current{
+    background-color: rgb(68, 67, 67);
+    margin: 5px;
+    border-radius:10px ;
+    padding: 10px;
+    overflow-x:hidden;
+    line-height: 2rem;
+}
+.current h2{
+    color:yellow;
+}
+.current p{
+    font-size: 12px;
+}
+.current h3{
+    color: yellow;
+}
+
+/* .urls{
+    background-color: rgb(68, 67, 67);
+    margin: 5px;
+    border-radius:10px ;
+    padding: 10px;
+    overflow-x:hidden;
+    line-height: 2rem;
+}
+.urls span{
+    color: yellow;
+    font-weight: bold;
+    font-size: 15px;
+    line-height: 2rem;
+} */
+.close{
+    background-color: rgb(68, 67, 67);
+    margin: 5px;
+    padding: 5px;
+    border-radius:10px ;
+}
+.close h3{
+    color: yellow;
+}
+.open{
+    background-color: rgb(68, 67, 67);
+    margin: 5px;
+    padding: 5px;
+    border-radius:10px ;
+}
+.open h3{
+    color: yellow;
+}

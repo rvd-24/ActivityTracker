@@ -7,4 +7,4 @@ Inside the activitytracker folder:
 - the useraccount app is used to store login/register details of the user
 - the tabtracker app is to store the details of the tabs
 - the displaytab app is used to fetch and display the stored tabs on the webpage
-- activitytracker is the project folder
+- activitytracker is the project main folder

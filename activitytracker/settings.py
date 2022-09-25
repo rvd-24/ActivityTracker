@@ -148,7 +148,7 @@ ENCRYPT_KEY=b'43Q4wwu0ZIwEjxa74bomrTK4923pcw6IkkzlEX8tTfA='
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'staticfiles/'
+STATIC_URL = 'static/'
 STATIC_ROOT=os.path.join(BASE_DIR,'assets')
 STATICFILES_DIRS=[
     os.path.join(BASE_DIR,'static')

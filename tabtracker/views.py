@@ -151,7 +151,7 @@ def sendchartdata(request):
             senddata['todaysec']=todaysec
             senddata['todayhour']=todayhour
             Tabdetails=[opentabs,closedtabs,activetime]
-            return HttpResponse(json.dumps(senddata), content_type="application/json")
+            return HttpResponse(json.dumps(senddata),content_type="application/json")
     else:
         return HttpResponse('indexw.html')
 

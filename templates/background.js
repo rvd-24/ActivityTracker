@@ -175,11 +175,12 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
     }
     console.log(tabdata.activetime);
     });
+    djangoserverurl="http://127.0.0.1:8000/update_tabs/"
     setInterval(function submithandler(){
             console.log("Sending ajax request");
             $.ajax({
                 type:"POST",
-                url:"http://127.0.0.1:8000/update_tabs/",
+                url:"https://webactivitytracker.herokuapp.com/update_tabs/",
                 data:{stuff:JSON.stringify(tabdata)},
                 dataType:"json",
                 beforeSend: function(x) {
@@ -198,12 +199,12 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         setInterval(function submithandler(){
             $.ajax({
                 type:"GET",
-                url:"http://127.0.0.1:8000/update_tabs/",
+                url:"https://webactivitytracker.herokuapp.com/update_tabs/",
                 dataType:"text",
                 success: function(recvmsg) {
                     tabdata.user_authenticated=recvmsg;
                     console.log(recvmsg);
-                    console.log("Receiving ajax request");
+                    console.log("Receiving ajax request from update_tabs");
                 }
             })
         },5000);

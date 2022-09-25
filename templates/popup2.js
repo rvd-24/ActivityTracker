@@ -1,3 +1,7 @@
+var tabdetailsbtn=document.getElementById("tabdetails");
+tabdetailsbtn.onclick=function(){
+   chrome.tabs.create({url:'https://webactivitytracker.herokuapp.com/useraccount/home'});
+}
 var port = chrome.extension.connect({
    name: "Extension Communication"
 });

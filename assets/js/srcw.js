@@ -78,7 +78,7 @@ function change1(){
     }
 }
 
-
+djangocharturl="http://127.0.0.1:8000/sendchartdata/"
 setInterval(function submithandler(){
     console.log("Receiving ajax request");
     /*$.get("http://127.0.0.1:8000/sendchartdata/", function(data, status){
@@ -86,12 +86,11 @@ setInterval(function submithandler(){
       });*/
     $.ajax({
         type:"GET",
-        url:"http://127.0.0.1:8000/sendchartdata/",
+        url:"https://webactivitytracker.herokuapp.com/sendchartdata/",
         dataType:"json",
         success: function(recvmsg) {
             var chart;
             var data;
-            console.log(recvmsg);
             google.charts.load('current',{
                 callback:drawChart,
                 packages:['corechart']
@@ -99,6 +98,12 @@ setInterval(function submithandler(){
             function drawChart(){
                 var tabdata=recvmsg;
                 data=new google.visualization.DataTable();
+                tabdata.opentabs = tabdata.opentabs.filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.url === value.url && t.id === value.id
+                        ))
+                    )
+                console.log(tabdata);
                 var date=new Date();
                 data.addColumn('string','url');
                 data.addColumn('number','seconds');
@@ -106,7 +111,7 @@ setInterval(function submithandler(){
                     for(var j=0;j<tabdata.opentabs.length;j++){
                         const Time = Math.abs(date - new Date(tabdata.opentabs[j].opentime));
                         const Days = Math.ceil(Time / (1000 * 60 * 60 * 24));
-                        console.log("Today",Days);
+                        // console.log("Today",Days);
                         if(Days<=1){
                             if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
                                 console.log(tabdata.activetime[i]);
@@ -135,6 +140,11 @@ setInterval(function submithandler(){
                 google.charts.setOnLoadCallback(drawChart1);
                 function drawChart1() {
                     var tabdata=recvmsg;
+                    tabdata.opentabs = tabdata.opentabs.filter((value, index, self) =>
+                        index === self.findIndex((t) => (
+                            t.url === value.url && t.id === value.id
+                        ))
+                    )
                     data=new google.visualization.DataTable();
                     data.addColumn('string','URL');
                     data.addColumn('number','seconds');
@@ -143,7 +153,7 @@ setInterval(function submithandler(){
                         for(var j=0;j<tabdata.opentabs.length;j++){
                             const Time = date - new Date(tabdata.opentabs[j].opentime);
                             const Days = Math.ceil(Time / (1000 * 60 * 60 * 24));
-                            console.log("THis week",Days);
+                            // console.log("THis week",Days);
                             if(Days<=7){
                                 if(tabdata.activetime[i].id===tabdata.opentabs[j].id){
                                     var totaltime=parseInt(tabdata.activetime[i].minutes)*60+parseInt(tabdata.activetime[i].hours)*60*60+parseInt(tabdata.activetime[i].seconds);

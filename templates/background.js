@@ -208,10 +208,11 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
                 }
             })
         },5000);
+        djangoserveralarm="http://127.0.0.1:8000/set_alarms"
         setInterval(function submithandler(){
             $.ajax({
                 type:"GET",
-                url:"http://127.0.0.1:8000/set_alarms",
+                url:"https://webactivitytracker.herokuapp.com/set_alarms/",
                 dataType:"json",
                 success: function(recvmsg) {
                     // console.log(recvmsg);

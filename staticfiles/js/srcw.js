@@ -78,7 +78,7 @@ function change1(){
     }
 }
 
-
+djangocharturl="http://127.0.0.1:8000/sendchartdata/"
 setInterval(function submithandler(){
     console.log("Receiving ajax request");
     /*$.get("http://127.0.0.1:8000/sendchartdata/", function(data, status){
@@ -86,7 +86,7 @@ setInterval(function submithandler(){
       });*/
     $.ajax({
         type:"GET",
-        url:"http://127.0.0.1:8000/sendchartdata/",
+        url:"https://webactivitytracker.herokuapp.com/sendchartdata/",
         dataType:"json",
         success: function(recvmsg) {
             var chart;

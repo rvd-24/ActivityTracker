@@ -180,7 +180,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
             console.log("Sending ajax request");
             $.ajax({
                 type:"POST",
-                url:"https://webactivitytracker.herokuapp.com/update_tabs/",
+                url:djangoserverurl,
                 data:{stuff:JSON.stringify(tabdata)},
                 dataType:"json",
                 beforeSend: function(x) {
@@ -199,7 +199,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         setInterval(function submithandler(){
             $.ajax({
                 type:"GET",
-                url:"https://webactivitytracker.herokuapp.com/update_tabs/",
+                url:"http://127.0.0.1:8000/update_tabs/",
                 dataType:"text",
                 success: function(recvmsg) {
                     tabdata.user_authenticated=recvmsg;
@@ -212,7 +212,7 @@ chrome.tabs.query({windowType:'normal'},function(tabs){
         setInterval(function submithandler(){
             $.ajax({
                 type:"GET",
-                url:"https://webactivitytracker.herokuapp.com/set_alarms/",
+                url:djangoserveralarm,
                 dataType:"json",
                 success: function(recvmsg) {
                     // console.log(recvmsg);

@@ -1,10 +1,10 @@
 loginbtn=document.getElementById("loginbtn");
 registerbtn=document.getElementById("registerlink");
 loginbtn.onclick = function () {
-    chrome.tabs.create({url: 'https://webactivitytracker.herokuapp.com/useraccount/login'});
+    chrome.tabs.create({url: 'http://127.0.0.1:8000/useraccount/login'});
 };
 registerbtn.onclick=function(){
-    chrome.tabs.create({url:'https://webactivitytracker.herokuapp.com/useraccount/register'});
+    chrome.tabs.create({url:'http://127.0.0.1:8000/useraccount/register'});
 }
 var port = chrome.extension.connect({
     name: "Extension Communication"

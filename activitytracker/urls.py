@@ -21,6 +21,7 @@ import useraccount.urls
 urlpatterns = [
     path('',include('displaytabs.urls')),
     path('',include('tabtracker.urls')),
+    path("", include("allauth.urls")),
     path('useraccount/',include('useraccount.urls')),
     path('admin/', admin.site.urls)
 ]

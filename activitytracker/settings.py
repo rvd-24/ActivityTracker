@@ -29,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 from decouple import config
 
-SECRET_KEY = get_random_secret_key()
+SECRET_KEY = "django-insecure-ucf=ik@-tafh6n@y)ju*6p_r__(4*urnkh3+t6_xpd19!*c0_u"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -42,8 +42,9 @@ AUTH_USER_MODEL="useraccount.useraccount"
 # Close the session when user closes the browser
 SESSION_EXPIRE_AT_BROWSER_CLOSE= True
 
-# Application definition
+SITE_ID=1
 
+# Application definition
 INSTALLED_APPS = [
     'useraccount',
     'tabtracker',
@@ -53,7 +54,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'account'
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'django.contrib.sites'
 ]
 
 TIME_ZONE = 'Asia/Kolkata'
@@ -164,4 +169,17 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-django_heroku.settings(locals())
+SOCIALACCOUNT_LOGIN_ON_GET=True
+
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}

@@ -86,7 +86,7 @@ setInterval(function submithandler(){
       });*/
     $.ajax({
         type:"GET",
-        url:"https://webactivitytracker.herokuapp.com/sendchartdata/",
+        url:djangocharturl,
         dataType:"json",
         success: function(recvmsg) {
             var chart;

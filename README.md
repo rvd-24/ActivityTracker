@@ -8,3 +8,6 @@ Inside the activitytracker folder:
 - the tabtracker app is to store the details of the tabs
 - the displaytab app is used to fetch and display the stored tabs on the webpage
 - activitytracker is the project main folder
+
+Screenshots
+![image](https://user-images.githubusercontent.com/72245900/212717958-4b451f6b-4ee4-4a71-b9a7-7866de8e8c1f.png)

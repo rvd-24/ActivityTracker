@@ -120,18 +120,16 @@ def index(request):
         continue;
       if "opentime" not in i:
         mostused.remove(i);
-    
-    for i in mostused:
-      if "opentime" not in i:
-        mostused.remove(i)
 
     for i in mostused:
-      if((datetime.now()-i['opentime']).days<1):
-        finalmostusedtoday.append(i)
+      if "opentime" in i:
+        if((datetime.now()-i['opentime']).days<1):
+          finalmostusedtoday.append(i)
       
     for i in mostused:
-      if ((datetime.now()-i['opentime']).days<=7):
-        finalmostusedthisweek.append(i)
+      if "opentime" in i:
+        if ((datetime.now()-i['opentime']).days<=7):
+          finalmostusedthisweek.append(i)
 
     for i in finalmostusedtoday:
       print("FMT",i)

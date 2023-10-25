@@ -207,9 +207,6 @@ def setalarms(request):
                 
                 if(updateflag==0):
                     alarm.append(detail)
-                print("Detail",detail)
-                print("SAKGHJDJGH",alarm)
-                print("LST",lst)
                 stuff.alarmdet=str(alarm)
                 stuff.email=request.user.email
                 stuff.save()
